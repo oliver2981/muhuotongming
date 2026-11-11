@@ -1,0 +1,2359 @@
+<!doctype html>
+<!-- 木火通明 · v1.1 · build 2026-11-11 19:55 · 外链版（照片与音频分离） -->
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#F4ECDD">
+  <title>木火通明 · 致米宝</title>
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="木火通明 · 致米宝">
+  <meta property="og:description" content="二〇二六年十一月十四。奥利奥王子弄丢了她，要走过三段路才找回来。">
+  <meta property="og:image" content="photos/p17.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <style>
+    :root {
+      --paper: #F4ECDD; --paper-light: #FBF6EA; --ink: #2A2A24;
+      --wood: #3F6B4F; --wood-light: #8FAE8B; --fire: #B23B2E;
+      --fire-light: #D76B4A; --gold: #C8A24A; --night: #101A24;
+      --shadow: 0 18px 50px rgba(42, 42, 36, .12);
+      --serif: "KaiTi", "STKaiti", "Kaiti SC", "楷体", "SimSun", serif;
+      --sans: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      min-height: 100vh; color: var(--ink); font-family: var(--sans);
+      background:
+        radial-gradient(circle at 18% 12%, rgba(255,255,255,.65), transparent 45%),
+        radial-gradient(circle at 82% 88%, rgba(143,174,139,.18), transparent 50%),
+        var(--paper);
+      overflow-x: hidden;
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .18;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+      mix-blend-mode: multiply;
+    }
+    button { font: inherit; color: inherit; cursor: pointer; }
+    :focus-visible { outline: 2px solid var(--fire); outline-offset: 3px; }
+    .scene { display: none; min-height: 100vh; padding: 72px 24px 56px; position: relative; z-index: 1; }
+    .scene.active { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; animation: sceneIn .7s ease both; }
+    .scene.cover.active { justify-content: center; }
+    @media (min-width: 900px) {
+      .scene[data-scene="fire"].active,
+      .scene[data-scene="parkour"].active,
+      .scene[data-scene="cake"].active,
+      .scene[data-scene="mountain"].active { justify-content: center; }
+    }
+    @media (max-width: 899px) {
+      /* 手机竖屏：内容垂直居中，别堆在顶部留半屏空白 */
+      .scene[data-scene="cake"].active,
+      .scene[data-scene="letter"].active { justify-content: center; }
+      .scene { padding: 56px 18px 40px; }
+      /* 顶部固定按钮（音乐 / 返回 / 重玩）在手机上占掉约 60px，要给它让位 */
+      .scene:not(.cover) { padding-top: 96px; }
+    }
+    @keyframes sceneIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+    .audio-toggle {
+      position: fixed; top: 18px; right: 18px; z-index: 20;
+      border: 1px solid rgba(42,42,36,.2); background: rgba(251,246,234,.86);
+      border-radius: 999px; padding: 8px 14px; font-size: 13px; color: var(--ink);
+      backdrop-filter: blur(8px);
+    }
+    .audio-toggle[aria-pressed="true"] { border-color: var(--fire); color: var(--fire); }
+    .nav-tools { position: fixed; top: 18px; left: 18px; z-index: 20; display: flex; gap: 8px; }
+    .nav-btn {
+      border: 1px solid rgba(42,42,36,.2); background: rgba(251,246,234,.86);
+      border-radius: 999px; padding: 8px 12px; font-size: 12px; color: var(--ink);
+      backdrop-filter: blur(8px);
+    }
+    .nav-btn:hover { border-color: var(--fire); color: var(--fire); }
+    @media (max-width: 700px) {
+      .nav-tools { top: 12px; left: 12px; gap: 6px; }
+      .nav-btn { padding: 6px 10px; font-size: 11px; }
+    }
+    .story-banner {
+      width: min(760px, 100%); margin: 0 0 22px; padding: 10px 18px;
+      border-radius: 12px;
+      background: rgba(251,246,234,.5); text-align: center;
+    }
+    .story-label { margin: 0 0 5px; font-family: var(--serif); font-size: 12.5px; letter-spacing: .2em; color: rgba(112,83,30,.72); }
+    .story-text { margin: 0; font-family: var(--serif); font-size: 17px; line-height: 1.85; color: rgba(42,42,36,.76); text-align: center; }
+    #cover-story { width: 100%; display: flex; justify-content: center; }
+    .journey { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; }
+    .journey-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(42,42,36,.15); }
+    .journey-dot.done { background: var(--gold); }
+    .journey-prince { position: relative; width: 18px; height: 18px; border-radius: 50%; background: #2E211C; box-shadow: inset 0 0 0 4px #F6E7C8; }
+    .journey-prince::after { content: ''; position: absolute; left: 50%; top: -5px; transform: translateX(-50%); border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 7px solid #E8C64A; }
+    .journey-princess { position: relative; width: 18px; height: 18px; border-radius: 50%; background: #F7D9D9; box-shadow: inset 0 0 0 3px #FFF6EA; }
+    .journey-princess::after { content: ''; position: absolute; left: 50%; top: -5px; transform: translateX(-50%); border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 7px solid #E8C64A; }
+    [data-scene="fire"] .journey-dot, [data-scene="parkour"] .journey-dot { background: rgba(247,238,220,.2); }
+    [data-scene="fire"] .journey-dot.done, [data-scene="parkour"] .journey-dot.done { background: var(--gold); }
+    .story-status { width: min(760px, 100%); margin: -4px 0 18px; font-family: var(--serif); font-size: 15px; line-height: 1.8; color: rgba(42,42,36,.62); text-align: center; }
+    .story-status::before { content: ''; display: inline-block; width: 12px; height: 12px; border-radius: 50%; background: #2E211C; box-shadow: inset 0 0 0 3px #F6E7C8; margin-right: 6px; vertical-align: -2px; }
+    [data-scene="fire"] .story-status, [data-scene="parkour"] .story-status { color: rgba(247,238,220,.62); }
+    @media (max-width: 700px) { .story-status { font-size: 14px; } }
+    [data-scene="fire"] .story-banner,
+    [data-scene="parkour"] .story-banner { background: rgba(16,26,36,.42); }
+    [data-scene="fire"] .story-text,
+    [data-scene="parkour"] .story-text { color: rgba(247,238,220,.88); }
+    [data-scene="fire"] .story-label,
+    [data-scene="parkour"] .story-label { color: rgba(215,107,74,.95); }
+    @media (max-width: 700px) {
+      .story-banner { padding: 9px 14px; margin-bottom: 16px; }
+      .story-text { font-size: 16px; }
+    }
+    .btn {
+      border: 1px solid rgba(42,42,36,.26); background: var(--paper-light);
+      border-radius: 999px; padding: 12px 28px; font-size: 16px;
+      box-shadow: 0 6px 18px rgba(42,42,36,.08); transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(42,42,36,.13); }
+    .btn-primary { background: var(--wood); color: #FFFDF6; border-color: var(--wood); }
+    .btn-fire { background: var(--fire); color: #FFFDF6; border-color: var(--fire); }
+    .cover { text-align: center; padding-top: 64px; padding-bottom: 56px; }
+    .cover-title {
+      margin: 0 auto; font-family: "STSong", "Songti SC", "SimSun", serif;
+      font-weight: 400; letter-spacing: .18em;
+      font-size: clamp(44px, 7vw, 76px); line-height: 1.15;
+      color: var(--ink); text-shadow: 0 2px 0 rgba(255,255,255,.4);
+    }
+    @media (max-width: 700px) {
+      .cover-title { font-size: clamp(48px, 16vw, 72px); }
+    }
+    .cover-subtitle { margin: 20px 0 0; font-family: var(--serif); font-size: clamp(20px, 3vw, 28px); letter-spacing: .18em; }
+    .cover-date { margin: 12px 0 0; color: rgba(42,42,36,.62); font-size: 14px; letter-spacing: .16em; }
+    #cover-story { width: 100%; display: flex; justify-content: center; margin: 30px 0 0; }
+    .cover-line {
+      margin: 22px auto 0; max-width: 560px; font-family: var(--serif);
+      font-size: 15.5px; line-height: 1.8; letter-spacing: .06em; color: rgba(42,42,36,.62);
+    }
+    .cover-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 30px; }
+    .cover-ask {
+      margin: 10px auto 0; max-width: 640px; font-family: var(--serif);
+      font-size: clamp(18px, 2.3vw, 21px); line-height: 1.85; color: var(--ink);
+      letter-spacing: .04em;
+    }
+    .cover-note { margin: 16px 0 0; font-size: 12.5px; letter-spacing: .08em; color: rgba(42,42,36,.5); }
+    .constellation { position: absolute; inset: 0; pointer-events: none; opacity: .34; }
+    .constellation svg { width: 100%; height: 100%; }
+    .constellation path { stroke-dasharray: 140; stroke-dashoffset: 140; animation: drawStars 3s ease .4s forwards; }
+    @keyframes drawStars { to { stroke-dashoffset: 0; } }
+    .scene-title { margin: 0 0 10px; font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 5vw, 44px); letter-spacing: .12em; }
+    .scene-sub { margin: 0 0 34px; color: rgba(42,42,36,.68); font-family: var(--serif); font-size: 17px; text-align: center; }
+    .panel { width: min(1040px, 100%); display: flex; flex-direction: column; align-items: center; }
+    .wood-progress { display: flex; gap: 10px; margin: 0 0 18px; align-items: center; }
+    .wood-progress .dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(42,42,36,.16); transition: .4s ease; }
+    .wood-progress .dot.lit { background: var(--wood); box-shadow: 0 0 10px rgba(63,107,79,.5); }
+    .wood-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; width: min(880px, 100%); }
+    .card {
+      position: relative; border: 0; background: transparent; padding: 0;
+      aspect-ratio: 3 / 4; perspective: 1000px; border-radius: 14px;
+    }
+    .card-inner {
+      position: absolute; inset: 0; transform-style: preserve-3d;
+      transition: transform .65s cubic-bezier(.2,.8,.2,1); border-radius: 14px;
+    }
+    .card.flipped .card-inner { transform: rotateY(180deg); }
+    .card-face {
+      position: absolute; inset: 0; backface-visibility: hidden; border-radius: 14px;
+      display: flex; align-items: center; justify-content: center; overflow: hidden;
+      border: 1px solid rgba(42,42,36,.18); box-shadow: var(--shadow);
+    }
+    .card-back {
+      background:
+        radial-gradient(circle at 30% 25%, rgba(143,174,139,.35), transparent 45%),
+        repeating-linear-gradient(45deg, rgba(63,107,79,.08) 0 2px, transparent 2px 10px),
+        var(--paper-light);
+      color: var(--wood); font-family: var(--serif); font-size: 46px;
+    }
+    .card-photo { transform: rotateY(180deg); background: #EDE4D2; display: block; }
+    .card-photo img { width: 100%; height: 100%; object-fit: cover; }
+    .card-text {
+      transform: rotateY(180deg); background: var(--paper-light); display: flex;
+      align-items: center; justify-content: center; padding: 16px;
+    }
+    .caption-quote { font-family: var(--serif); font-size: 16px; line-height: 1.8; color: var(--ink); text-align: center; }
+    .caption-quote::before { content: '“'; display: block; color: var(--fire); font-size: 30px; line-height: 1; margin-bottom: 4px; }
+    .card[data-kind="photo"] .card-back { color: var(--wood); }
+    .card[data-kind="caption"] .card-back { color: var(--fire); }
+    .card.matched { box-shadow: 0 0 0 2px var(--wood), 0 12px 30px rgba(63,107,79,.2); }
+    .wood-message { min-height: 2.4em; margin: 12px 0 0; font-family: var(--serif); font-size: 15px; line-height: 1.7; color: rgba(42,42,36,.7); text-align: center; }
+    /* 木幕牌阵在矮窗口（笔记本）里放不下两排，露头提示往下滑 */
+    .scroll-cue {
+      position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 15;
+      margin: 0; padding: 7px 16px; border-radius: 999px; white-space: nowrap; pointer-events: none;
+      background: rgba(42,42,36,.66); color: #FBF6E9; font-family: var(--serif); font-size: 13px;
+      letter-spacing: .08em; box-shadow: 0 8px 24px rgba(42,42,36,.2);
+      animation: moreNudge 2.4s ease-in-out infinite;
+    }
+    @keyframes moreNudge { 0%, 100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 4px); } }
+    /* 笔记本 / 矮窗口：把故事卡与标题压紧，让第二排牌也能露出小半截，不至于"只看到第一排" */
+    @media (min-width: 900px) and (max-height: 880px) {
+      .scene { padding-top: 54px; }
+      .story-banner { padding: 8px 16px; margin-bottom: 14px; }
+      .story-label { margin-bottom: 3px; font-size: 12px; }
+      .story-text { font-size: 15.5px; line-height: 1.7; }
+      .journey { margin-top: 8px; }
+      .scene-title { font-size: clamp(30px, 3.2vw, 36px); margin-bottom: 6px; }
+      .scene-sub { margin-bottom: 16px; font-size: 15.5px; }
+      .story-status { margin: -2px 0 10px; font-size: 14.5px; }
+      .wood-progress { margin-bottom: 10px; }
+      .wood-message { min-height: 1.8em; margin-top: 8px; font-size: 14px; }
+    }
+    .done-wrap { display: flex; flex-direction: column; align-items: center; margin-top: 28px; }
+    .pause-hint { margin: -4px 0 18px; font-size: 13px; line-height: 1.7; letter-spacing: .05em; color: rgba(42,42,36,.52); text-align: center; }
+    [data-scene="fire"] .pause-hint, [data-scene="parkour"] .pause-hint { color: rgba(247,238,220,.58); }
+
+    /* 幕间的"记忆卡"：把这一路找回来的那段话给到她 */
+    .memory-veil {
+      position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center;
+      padding: 24px; background: rgba(18,14,10,.58); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+      opacity: 0; transition: opacity .4s ease; overflow-y: auto;
+    }
+    .memory-veil.hidden { display: none; }
+    .memory-veil.show { opacity: 1; }
+    .memory-card {
+      width: min(620px, 100%); padding: 46px 44px 38px; border-radius: 18px; text-align: center;
+      background: linear-gradient(180deg, #FFFCF3, #FBF4E4);
+      box-shadow: 0 30px 80px rgba(0,0,0,.32), inset 0 0 0 1px rgba(200,162,74,.28);
+      transform: translateY(12px) scale(.97); transition: transform .4s ease;
+    }
+    .memory-veil.show .memory-card { transform: none; }
+    .memory-label { margin: 0; font-size: 12px; letter-spacing: .34em; text-indent: .34em; color: var(--gold); }
+    .memory-title { margin: 14px 0 0; font-family: var(--serif); font-weight: 400; font-size: 23px; letter-spacing: .12em; color: var(--ink); }
+    .memory-lines { margin: 24px 0 0; }
+    .memory-lines p {
+      margin: 0 0 14px; font-family: var(--serif); font-size: 16.5px; line-height: 2; color: rgba(42,42,36,.86);
+      text-align: justify; text-indent: 2em;
+    }
+    .memory-lines p:last-child { margin-bottom: 0; }
+    .memory-card .btn { margin-top: 26px; }
+    @media (max-width: 700px) {
+      .memory-card { padding: 32px 24px 28px; }
+      .memory-title { font-size: 20px; }
+      .memory-lines p { font-size: 15.5px; line-height: 1.95; }
+    }
+    @media (max-width: 900px) {
+      .wood-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+      .caption-quote { font-size: 14px; }
+    }
+    [data-scene="fire"] {
+      background:
+        radial-gradient(circle at 50% 30%, rgba(178,59,46,.22), transparent 42%),
+        radial-gradient(circle at 50% 100%, rgba(200,162,74,.12), transparent 55%),
+        var(--night);
+      color: #F7EEDC;
+    }
+    .fire-title { color: #F7EEDC; }
+    .fire-sub { color: rgba(247,238,220,.7); }
+    .lantern-row { display: flex; gap: 28px; align-items: flex-end; justify-content: center; flex-wrap: wrap; }
+    .lantern {
+      border: 0; background: transparent; padding: 0; width: 170px;
+      display: flex; flex-direction: column; align-items: center; gap: 14px;
+      opacity: .8; transition: opacity .5s ease, transform .5s ease;
+    }
+    .lantern.lit { opacity: 1; transform: translateY(-6px); }
+    .lantern-body {
+      position: relative; width: 96px; height: 126px; border-radius: 48px 48px 40px 40px;
+      background:
+        radial-gradient(circle at 50% 62%, rgba(255,220,170,.55), rgba(215,107,74,.12) 58%, rgba(178,59,46,.06) 78%),
+        linear-gradient(180deg, rgba(215,107,74,.2), rgba(178,59,46,.1));
+      border: 1px solid rgba(247,238,220,.34); display: block;
+    }
+    .lantern.lit .lantern-body {
+      background: linear-gradient(180deg, rgba(215,107,74,.85), rgba(178,59,46,.55));
+      box-shadow: 0 0 40px 10px rgba(215,107,74,.28);
+    }
+    /* 还没点亮的灯轻轻呼吸一下，配上面那行"长按点灯"，不用猜该怎么按 */
+    .lantern:not(.lit) .lantern-body { animation: lanternBreath 2.6s ease-in-out infinite; }
+    @keyframes lanternBreath {
+      0%, 100% { box-shadow: 0 0 0 rgba(215,107,74,0); }
+      50% { box-shadow: 0 0 26px 4px rgba(215,107,74,.18); }
+    }
+    .flame {
+      position: absolute; left: 50%; bottom: -14px; width: 22px; height: 30px;
+      transform: translateX(-50%) scale(.2); opacity: 0;
+      background: radial-gradient(circle at 50% 70%, #FFE9A8, #D76B4A 55%, transparent 72%);
+      border-radius: 50% 50% 45% 45%; transition: transform .6s ease, opacity .6s ease;
+    }
+    .lantern.lit .flame { transform: translateX(-50%) scale(1); opacity: 1; animation: flicker 1.6s ease-in-out infinite; }
+    @keyframes flicker { 0%,100% { transform: translateX(-50%) scale(1); } 50% { transform: translateX(-50%) scale(1.12, .94); } }
+    .lantern-photo {
+      width: 150px; border-radius: 10px; overflow: hidden; background: rgba(0,0,0,.35);
+      opacity: 0; transform: translateY(8px); max-height: 0;
+      transition: opacity .6s ease, transform .6s ease, max-height .6s ease;
+    }
+    .lantern.lit .lantern-photo { opacity: 1; transform: none; max-height: 200px; }
+    .lantern-photo img { width: 100%; height: 96px; object-fit: cover; display: block; }
+    .lantern-photo span { display: block; padding: 8px; font-family: var(--serif); font-size: 12px; line-height: 1.5; color: rgba(247,238,220,.9); }
+    .lantern-hint {
+      margin-top: 30px; padding: 9px 20px; border-radius: 999px;
+      border: 1px solid rgba(247,238,220,.34); background: rgba(16,26,36,.46);
+      color: rgba(247,238,220,.94); font-size: 14px; letter-spacing: .1em;
+      box-shadow: 0 0 24px rgba(215,107,74,.14);
+    }
+    .lantern-hint::before {
+      content: ''; display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--fire); margin-right: 9px; vertical-align: -1px;
+      animation: hintPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes hintPulse { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
+    @media (max-width: 700px) {
+      /* 三盏灯并排：手机 390 宽下 3×108 + 2×10 = 344，正好一行 */
+      .lantern-row { gap: 10px; flex-wrap: nowrap; }
+      .lantern { width: 108px; }
+      .lantern-body { width: 84px; height: 112px; }
+      .lantern-photo { width: 104px; }
+      .lantern-photo img { height: 76px; }
+      .lantern-hint { margin-top: 18px; padding: 8px 16px; font-size: 13px; }
+    }
+    [data-scene="herbs"] { position: relative; overflow: hidden; }
+    .herb-bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: blur(5px) saturate(.8); }
+    .herb-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; width: 100%; }
+    .herb-layout { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; width: min(980px, 100%); align-items: center; }
+    .element-ring {
+      position: relative; width: min(380px, 80vw); aspect-ratio: 1; margin: 0 auto;
+      border: 1px dashed rgba(63,107,79,.35); border-radius: 50%;
+    }
+    .element-ring.complete { animation: ringGlow 2.2s ease; }
+    @keyframes ringGlow { 0%, 100% { box-shadow: 0 0 0 rgba(63,107,79,0); } 45% { box-shadow: 0 0 44px rgba(63,107,79,.35); } }
+    .element-node {
+      position: absolute; left: 50%; top: 50%; width: 58px; height: 58px; border-radius: 50%;
+      display: grid; place-items: center; font-family: var(--serif); font-size: 22px;
+      background: rgba(251,246,234,.9); border: 1px solid rgba(42,42,36,.2); color: rgba(42,42,36,.45);
+      transform: translate(-50%, -50%) rotate(calc(var(--i) * 72deg)) translateY(-150px) rotate(calc(var(--i) * -72deg));
+      transition: .5s ease;
+    }
+    .element-node.present { background: rgba(63,107,79,.14); border-color: rgba(63,107,79,.35); color: rgba(63,107,79,.75); }
+    .element-node.missing { background: rgba(251,246,234,.55); border: 1px dashed rgba(178,59,46,.6); color: rgba(178,59,46,.65); }
+    .element-node.filled { background: var(--wood); color: #FFFDF6; border-color: var(--wood); box-shadow: 0 0 24px rgba(63,107,79,.28); }
+    .element-node[data-element="火"].filled { background: var(--fire); border-color: var(--fire); box-shadow: 0 0 24px rgba(178,59,46,.3); }
+    .missing-line { margin: -16px 0 18px; font-family: var(--serif); font-size: 17px; letter-spacing: .08em; color: var(--fire); text-align: center; }
+    .heart-node {
+      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+      width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center;
+      font-family: var(--serif); font-size: 20px; color: rgba(178,59,46,.5);
+      background: rgba(251,246,234,.9); border: 1px dashed rgba(178,59,46,.4); transition: .5s ease;
+    }
+    .heart-node.filled { background: var(--fire); color: #FFFDF6; border-color: var(--fire); box-shadow: 0 0 24px rgba(178,59,46,.35); }
+    .herb-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .herb {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      border: 1px solid rgba(42,42,36,.2); background: rgba(251,246,234,.92);
+      border-radius: 12px; padding: 16px 18px; font-family: var(--serif); font-size: 20px;
+      box-shadow: 0 8px 20px rgba(42,42,36,.06);
+    }
+    .herb-element { font-size: 13px; color: rgba(42,42,36,.5); opacity: 0; transition: opacity .4s ease; }
+    .herb.found { border-color: var(--wood); color: var(--wood); }
+    .herb.found .herb-element { opacity: 1; }
+    .herb:hover { border-color: rgba(200,162,74,.55); }
+    .herb-note { grid-column: 1 / -1; min-height: 3.2em; margin: 10px 2px 0; font-family: var(--serif); font-size: 15px; line-height: 1.7; color: rgba(42,42,36,.72); }
+    .prescription {
+      margin: 16px auto 0; width: min(420px, 100%); padding: 16px 20px;
+      border: 1px solid rgba(178,59,46,.28); border-radius: 12px;
+      background: rgba(251,246,234,.92); text-align: center;
+    }
+    .prescription-title { margin: 0 0 8px; font-family: var(--serif); font-size: 22px; letter-spacing: .16em; color: var(--fire); }
+    .prescription-herbs { margin: 0 0 10px; font-family: var(--serif); font-size: 17px; color: var(--ink); }
+    .prescription-line { margin: 0; font-family: var(--serif); font-size: 15px; line-height: 1.7; color: rgba(42,42,36,.7); }
+    @media (max-width: 760px) {
+      .herb-layout { grid-template-columns: 1fr; gap: 18px; }
+      .element-ring { width: min(300px, 72vw); }
+      .element-node { width: 48px; height: 48px; transform: translate(-50%, -50%) rotate(calc(var(--i) * 72deg)) translateY(-115px) rotate(calc(var(--i) * -72deg)); }
+    }
+    [data-scene="parkour"] { background: radial-gradient(circle at 50% 20%, rgba(243,217,184,.2), transparent 50%), #1A2033; color: #F7EEDC; }
+    [data-scene="parkour"] .scene-title { color: #F7EEDC; }
+    [data-scene="parkour"] .scene-sub { color: rgba(247,238,220,.7); }
+    .parkour-wrap { position: relative; width: min(900px, 100%); margin: 8px 0 10px; }
+    .parkour-canvas { width: 100%; display: block; border-radius: 16px; box-shadow: var(--shadow); border: 1px solid rgba(247,238,220,.18); background: #1A2033; touch-action: none; }
+    .parkour-rescue {
+      position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%);
+      width: min(520px, 90%); padding: 12px 16px; border-radius: 12px;
+      background: rgba(251,246,234,.92); color: var(--fire);
+      font-family: var(--serif); font-size: 16px; line-height: 1.7; text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    }
+    .parkour-score { font-family: var(--serif); font-size: 14px; color: rgba(247,238,220,.65); margin: 0 0 8px; letter-spacing: .1em; }
+    [data-scene="parkour"] .done-line { color: #F7EEDC; }
+    [data-scene="mountain"] { position: relative; overflow: hidden; }
+    .mountain-bg { position: absolute; inset: 0; background-size: cover; background-position: center; filter: blur(1px); }
+    .mountain-content { position: relative; z-index: 1; width: min(760px, 100%); display: flex; flex-direction: column; align-items: center; }
+    .mountain-sheet {
+      width: min(640px, 100%); display: flex; flex-direction: column; align-items: center;
+      margin-top: 10px; padding: 30px 30px 36px; border-radius: 16px;
+      background: rgba(251,246,234,.945); box-shadow: 0 16px 40px rgba(42,42,36,.18);
+      border: 1px solid rgba(42,42,36,.08);
+    }
+    [data-scene="mountain"] .scene-title { color: #2A2A24; }
+    [data-scene="mountain"] .scene-sub { color: rgba(42,42,36,.82); }
+    .wish-steps {
+      font-family: var(--serif); font-size: 15px; letter-spacing: .06em;
+      color: rgba(178,59,46,.9); margin: 16px 0 4px;
+    }
+    .wish-box { display: flex; gap: 10px; width: min(560px, 100%); margin-top: 10px; }
+    .wish-box input {
+      flex: 1; min-width: 0; border: 1px solid rgba(42,42,36,.26); border-radius: 999px;
+      padding: 12px 18px; font-family: var(--serif); font-size: 17px; color: var(--ink);
+      background: #FFFDF6; outline: none;
+    }
+    .wish-box input:focus { border-color: var(--fire); box-shadow: 0 0 0 3px rgba(178,59,46,.12); }
+    .wish-box.shake { animation: shake .4s ease; }
+    @keyframes shake { 0%,100% { transform: none; } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+    .wish-hint { font-size: 14px; color: rgba(42,42,36,.6); margin: 10px 0 0; min-height: 1.4em; text-align: center; }
+    .wish-hint.warn { color: var(--fire); }
+    .ribbon-wrap { width: min(620px, 100%); margin-top: 24px; opacity: .35; transform: translateY(10px); transition: .8s ease; }
+    .ribbon-wrap.fly { opacity: 1; transform: none; }
+    .ribbon-path { animation: tie 1.8s ease both; }
+    @keyframes tie { from { stroke-dashoffset: 420; } to { stroke-dashoffset: 0; } }
+    .ribbon-text { font-family: var(--serif); font-size: 30px; fill: var(--fire); paint-order: stroke; stroke: rgba(251,246,234,.95); stroke-width: 6px; stroke-linejoin: round; }
+    [data-scene="mountain"] .done-line { color: #2A2A24; }
+    [data-scene="mountain"] .story-status { color: rgba(42,42,36,.66); }
+    @media (max-width: 600px) {
+      .wish-box { flex-direction: column; }
+      .mountain-sheet { padding: 24px 18px 28px; }
+    }
+    [data-scene="cake"] { background: radial-gradient(circle at 50% 20%, rgba(243,217,184,.55), transparent 52%), var(--paper); }
+    .cake-shop { width: min(820px, 100%); display: flex; flex-direction: column; align-items: center; margin-top: 6px; }
+    .cake-question { font-family: var(--serif); font-size: 22px; margin: 8px 0 20px; text-align: center; }
+    .cake-options { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+    .cake-choice {
+      border: 1px solid rgba(42,42,36,.22); background: var(--paper-light); border-radius: 999px;
+      padding: 12px 26px; font-family: var(--serif); font-size: 19px; box-shadow: 0 6px 16px rgba(42,42,36,.06);
+    }
+    .cake-row { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+    .cake-card {
+      position: relative; width: 190px; border: 1px solid rgba(42,42,36,.18); border-radius: 14px;
+      background: linear-gradient(180deg, #FFF9EC, #F3D9B8); padding: 16px 14px 14px;
+      display: flex; flex-direction: column; align-items: center; gap: 10px; box-shadow: var(--shadow);
+    }
+    .cake-slice {
+      width: 110px; height: 62px; border-radius: 8px 8px 14px 14px;
+      background: linear-gradient(180deg, #F7E6C8 0 22%, #E8B86D 22% 46%, #F7E6C8 46% 62%, #D98F5A 62% 100%);
+      box-shadow: inset 0 -6px 0 rgba(178,59,46,.16);
+    }
+    .cake-card[data-cake="mango"] .cake-slice { background: linear-gradient(180deg, #FFE7A8 0 24%, #F2B33D 24% 52%, #FFE7A8 52% 68%, #E09A2C 68% 100%); }
+    .cake-card[data-cake="durian"] .cake-slice { background: linear-gradient(180deg, #FFF2B8 0 24%, #E8C64A 24% 52%, #FFF2B8 52% 68%, #C9A227 68% 100%); }
+    .cake-card[data-cake="strawberry"] .cake-slice { background: linear-gradient(180deg, #FFE1E1 0 24%, #E86A6A 24% 52%, #FFE1E1 52% 68%, #C94F4F 68% 100%); }
+    .cake-name { font-family: var(--serif); font-size: 18px; }
+    .cake-warn { position: absolute; top: 8px; right: 10px; color: var(--fire); font-size: 20px; }
+    .cake-feedback { min-height: 2.6em; margin: 18px 0 0; font-family: var(--serif); font-size: 16px; line-height: 1.7; text-align: center; color: rgba(42,42,36,.72); }
+    .cake-done { display: flex; flex-direction: column; align-items: center; margin-top: 10px; }
+    .cake-line { font-family: var(--serif); font-size: clamp(20px, 3vw, 26px); color: var(--fire); margin: 0 0 10px; text-align: center; }
+    .cake-teaser {
+      font-family: var(--serif); font-size: 15.5px; line-height: 1.9; letter-spacing: .04em;
+      color: rgba(42,42,36,.66); margin: 0 0 20px; text-align: center;
+      padding-top: 12px; border-top: 1px solid rgba(200,162,74,.32); max-width: 420px;
+    }
+    .cake-carry {
+      font-family: var(--serif); font-size: 14.5px; line-height: 1.8; letter-spacing: .05em;
+      color: rgba(42,42,36,.52); margin: -10px 0 18px; text-align: center;
+    }
+    .cake-memory {
+      max-width: 430px; width: 100%; margin: 0 0 18px; padding: 4px 0 4px 16px;
+      border-left: 2px solid rgba(200,162,74,.55);
+      font-family: var(--serif); font-size: 15.5px; line-height: 1.95;
+      color: rgba(42,42,36,.8); letter-spacing: .03em; text-align: left;
+    }
+    .cake-memory-label {
+      font-size: 12px; letter-spacing: .16em; color: rgba(200,162,74,.95); margin: 0 0 6px;
+    }
+    .cake-memory p { margin: 0; }
+    @media (max-width: 700px) { .cake-card { width: 150px; } .cake-slice { width: 90px; height: 52px; } .cake-question { font-size: 19px; } }
+    [data-scene="letter"] { background: radial-gradient(circle at 50% 0%, rgba(200,162,74,.12), transparent 46%), var(--paper); }
+    .letter-paper {
+      width: min(760px, 100%); background: var(--paper-light); padding: 64px 44px 56px;
+      border: 1px solid rgba(42,42,36,.14); box-shadow: var(--shadow); position: relative;
+      background-image: repeating-linear-gradient(0deg, transparent 0 31px, rgba(42,42,36,.04) 31px 32px);
+    }
+    .letter-to { margin: 0 0 32px; font-family: var(--serif); font-size: 26px; line-height: 32px; letter-spacing: .2em; text-align: center; }
+    .letter-section { opacity: 0; transform: translateY(10px); transition: .8s ease; display: none; }
+    .letter-section.show { display: block; opacity: 1; transform: none; }
+    .letter-section h3 { margin: 32px 0 0; font-family: var(--serif); font-weight: 400; font-size: 20px; line-height: 32px; color: var(--fire); letter-spacing: .18em; }
+    .letter-section p { margin: 0; font-family: var(--serif); font-size: 18px; line-height: 32px; text-align: justify; text-indent: 2em; }
+    .letter-section .letter-note { margin: -2px 0 14px; font-family: var(--sans, sans-serif); font-size: 12px; line-height: 22px; letter-spacing: .12em; text-indent: 0; text-align: right; color: rgba(42,42,36,.42); }
+    .letter-signature { display: none; text-align: right; margin: 32px 0 0; font-family: var(--serif); font-size: 17px; line-height: 32px; color: rgba(42,42,36,.78); }
+    .letter-signature.show { display: block; }
+    @media (max-width: 700px) {
+      /* 顶内边距也必须是 32 的整数倍，否则正文会跟横线错开 */
+      .letter-paper { padding: 32px 24px 40px; }
+      .letter-section p { font-size: 17px; }
+    }
+    [data-scene="finale"] { background: radial-gradient(circle at 50% 18%, rgba(200,162,74,.14), transparent 42%), var(--paper); }
+    .finale-head { text-align: center; margin-bottom: 24px; }
+    .wish-echo { font-family: var(--serif); color: var(--fire); font-size: 16px; margin: 0 0 8px; letter-spacing: .08em; }
+    .gallery { columns: 4 190px; column-gap: 14px; width: min(1080px, 100%); }
+    .gallery-item {
+      break-inside: avoid; width: 100%; margin: 0 0 14px; padding: 0; border: 0; background: var(--paper-light);
+      border-radius: 10px; overflow: hidden; box-shadow: 0 8px 20px rgba(42,42,36,.08);
+      display: block; text-align: left;
+    }
+    .gallery-item img { width: 100%; display: block; aspect-ratio: 4 / 3; object-fit: cover; }
+    .gallery-item span { display: block; padding: 8px 10px; font-family: var(--serif); font-size: 13px; line-height: 1.55; color: rgba(42,42,36,.72); }
+    .cake-zone { display: flex; flex-direction: column; align-items: center; margin-top: 44px; }
+    .cake { position: relative; width: 170px; height: 130px; border: 0; background: transparent; }
+    .cake-plate { position: absolute; left: 8px; right: 8px; bottom: 0; height: 10px; border-radius: 50%; background: rgba(42,42,36,.16); }
+    .cake-body { position: absolute; left: 26px; right: 26px; bottom: 8px; height: 56px; border-radius: 12px 12px 18px 18px; background: linear-gradient(180deg, #F3D9B8, #D9A77C); box-shadow: inset 0 -8px 0 rgba(178,59,46,.18); }
+    .candle-stick { position: absolute; left: 50%; bottom: 60px; width: 12px; height: 42px; transform: translateX(-50%); border-radius: 4px; background: repeating-linear-gradient(45deg, #B23B2E 0 6px, #F4ECDD 6px 12px); }
+    .candle-flame { position: absolute; left: 50%; bottom: 42px; width: 18px; height: 26px; transform: translateX(-50%); border-radius: 50% 50% 45% 45%; background: radial-gradient(circle at 50% 70%, #FFF3C4, #D76B4A 58%, transparent 74%); filter: drop-shadow(0 0 12px rgba(215,107,74,.55)); animation: flicker 1.4s ease-in-out infinite; }
+    .cake.blowing .candle-flame { animation-duration: .35s; }
+    #finale-panel.candle-out .candle-flame { opacity: 0; transform: translateX(-50%) scale(.2); }
+    .heart-photo { width: min(520px, 88vw); margin: 24px 0 8px; padding: 10px; background: var(--paper-light); scroll-margin-top: 76px; box-shadow: var(--shadow); border: 1px solid rgba(42,42,36,.14); }
+    .heart-photo img { width: 100%; display: block; border-radius: 6px; }
+    .heart-photo figcaption { padding: 10px 4px 2px; text-align: center; font-family: var(--serif); color: rgba(42,42,36,.72); }
+    .finale-big { text-align: center; margin-top: 16px; }
+    .big-line { font-family: var(--serif); font-size: clamp(32px, 5vw, 48px); letter-spacing: .12em; margin: 0 0 12px; }
+    .small-line { font-family: var(--serif); font-size: 18px; color: rgba(42,42,36,.7); margin: 0; }
+    .gift-line {
+      margin: 18px auto 0; max-width: 460px; font-family: var(--serif); font-size: 16px; line-height: 1.9;
+      letter-spacing: .06em; color: rgba(42,42,36,.55);
+      padding-top: 16px; border-top: 1px solid rgba(200,162,74,.3);
+    }
+    .lightbox { position: fixed; inset: 0; z-index: 40; background: rgba(16,26,36,.86); display: grid; place-items: center; padding: 40px; }
+    .lightbox img { max-width: min(1000px, 92vw); max-height: 82vh; border-radius: 8px; box-shadow: 0 30px 80px rgba(0,0,0,.45); }
+    .lightbox-close { position: absolute; top: 20px; right: 24px; border: 0; background: transparent; color: #FFFDF6; font-size: 34px; line-height: 1; }
+    @media (max-width: 700px) { .gallery { columns: 2 140px; } .big-line { font-size: 32px; } }
+    .seal {
+      width: 64px; height: 64px; border: 3px solid currentColor; border-radius: 12px;
+      display: grid; place-items: center; font-family: var(--serif); font-size: 34px;
+      transform: rotate(-6deg); opacity: 0; transition: opacity .5s ease, transform .5s ease;
+    }
+    .seal.show { opacity: 1; transform: rotate(-6deg) scale(1.04); }
+    .seal.wood { color: var(--wood); } .seal.fire { color: var(--fire); }
+    .done-line { margin: 18px 0; font-family: var(--serif); font-size: 20px; text-align: center; }
+    .next-row { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; justify-content: center; }
+    .hidden { display: none !important; }
+    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+    .fireflies { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .firefly {
+      position: fixed; width: 4px; height: 4px; border-radius: 50%;
+      background: rgba(200, 162, 74, .75); box-shadow: 0 0 10px 3px rgba(200,162,74,.25);
+      animation: drift 8s ease-in-out infinite alternate; pointer-events: none; z-index: 0;
+    }
+    @keyframes drift {
+      from { transform: translate3d(0, 0, 0); opacity: .15; }
+      50% { opacity: .8; }
+      to { transform: translate3d(18px, -28px, 0); opacity: .2; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
+      .firefly { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <button class="audio-toggle" data-testid="audio-toggle" aria-pressed="false" aria-label="切换背景音乐">音乐 关</button>
+  <div class="nav-tools">
+    <button class="nav-btn hidden" data-testid="back" aria-label="返回上一关">← 上一关</button>
+    <button class="nav-btn hidden" data-testid="replay" aria-label="重玩本关">↺ 重玩本关</button>
+  </div>
+  <div class="scroll-cue hidden" data-testid="scroll-cue" aria-hidden="true">↓ 下面还有四张牌，往下滑</div>
+
+  <main id="app">
+    <section class="scene cover" data-scene="cover">
+      <div class="constellation" aria-hidden="true">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
+          <g fill="none" stroke="rgba(42,42,36,.22)" stroke-width=".12">
+            <path d="M12 22 L21 16 L28 25 L36 18 L44 27 L53 20 L62 30 L70 24 L78 33 L87 27" />
+          </g>
+          <g fill="rgba(42,42,36,.45)">
+            <circle cx="12" cy="22" r=".28"/><circle cx="21" cy="16" r=".34"/><circle cx="28" cy="25" r=".24"/>
+            <circle cx="36" cy="18" r=".3"/><circle cx="44" cy="27" r=".24"/><circle cx="53" cy="20" r=".34"/>
+            <circle cx="62" cy="30" r=".28"/><circle cx="70" cy="24" r=".24"/><circle cx="78" cy="33" r=".3"/>
+            <circle cx="87" cy="27" r=".24"/>
+          </g>
+        </svg>
+      </div>
+      <h1 class="cover-title" data-bind="title">木火通明</h1>
+      <p class="cover-subtitle" data-bind="subtitle">致米宝 · 生辰</p>
+      <p class="cover-date" data-bind="date">二〇二六年十一月十四</p>
+      <div id="cover-story"></div>
+      <p class="cover-line" data-bind="line">今夜，整座饼干王国都为她亮着。</p>
+      <p class="cover-ask" data-bind="ask">你愿意帮他抵达大米公主的宫殿，替她过一次生日吗？</p>
+      <div class="cover-actions">
+        <button class="btn btn-primary" data-testid="start" data-action="start">愿意</button>
+        <button class="btn hidden" data-testid="resume" data-action="resume">继续上次</button>
+      </div>
+      <p class="cover-note" data-bind="note">大约十分钟 · 累了随时可以停下，回来接着走</p>
+    </section>
+
+    <section class="scene" data-scene="wood"><div class="panel" id="wood-panel"></div></section>
+    <section class="scene" data-scene="fire"><div class="panel" id="fire-panel"></div></section>
+    <section class="scene" data-scene="herbs"><div class="panel" id="herbs-panel"></div></section>
+    <section class="scene" data-scene="parkour"><div class="panel" id="parkour-panel"></div></section>
+    <section class="scene" data-scene="mountain"><div class="panel" id="mountain-panel"></div></section>
+    <section class="scene" data-scene="cake"><div class="panel" id="cake-panel"></div></section>
+    <section class="scene" data-scene="letter"><div class="panel" id="letter-panel"></div></section>
+    <section class="scene" data-scene="finale"><div class="panel" id="finale-panel"></div></section>
+  </main>
+
+  <div class="fireflies" id="fireflies" aria-hidden="true"></div>
+
+  <div class="memory-veil hidden" data-testid="memory-veil" role="dialog" aria-modal="true" aria-labelledby="memory-title">
+    <div class="memory-card">
+      <p class="memory-label" data-testid="memory-label"></p>
+      <h3 class="memory-title" id="memory-title" data-testid="memory-title"></h3>
+      <div class="memory-lines" data-testid="memory-lines"></div>
+      <button class="btn btn-primary" data-testid="memory-close">想起来了</button>
+    </div>
+  </div>
+
+  <script>(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.CONTENT = factory();
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  const PHOTOS = [
+    { id: 'p01', file: 'photos/inedit_1776060970480.jpg', scene: 'wood', caption: '那时还不知道，镜头会替我们记住这么多个瞬间。' },
+    { id: 'p02', file: 'photos/mmexport1776012982503.jpg', scene: 'wood', caption: '你坐在木马上，像把整个春天骑回了家。' },
+    { id: 'p03', file: 'photos/mmexport1774795968850.jpg', scene: 'wood', caption: '一起流汗的日子，也算并肩作战。' },
+    { id: 'p04', file: 'photos/mmexport1776657518424.jpg', scene: 'wood', caption: '风把草吹向你，我负责把花递给你。' },
+    { id: 'p05', file: 'photos/mmexport1777968199947.jpg', scene: 'gallery', caption: '山路很长，你在旁边就不算远。' },
+    { id: 'p06', file: 'photos/mmexport1777968193334.jpg', scene: 'wood', caption: '红丝带上写满别人的愿望，我的愿望站在我身边。' },
+    { id: 'p07', file: 'photos/mmexport1774150622797.jpg', scene: 'fire', caption: '你眨一下眼，我这边就亮了。' },
+    { id: 'p08', file: 'photos/1794406550821.jpg', scene: 'fire', caption: '你拿起麦克风，我就自动变成观众。' },
+    { id: 'p09', file: 'photos/mmexport1776658076339.jpg', scene: 'gallery', caption: '蓝色灯光里，你比霓虹好看。' },
+    { id: 'p10', file: 'photos/mmexport1776012924457.jpg', scene: 'fire', caption: '人间烟火里，你回头找我的样子。' },
+    { id: 'p11', file: 'photos/1794406550862.jpg', scene: 'gallery', caption: '花会谢，但那晚的河风记得。' },
+    { id: 'p12', file: 'photos/mmexport1779333685784.jpg', scene: 'gallery', caption: '花在桌上，你在我眼里——这句有点土，但是真的。' },
+    { id: 'p13', file: 'photos/mmexport1780981738473.jpg', scene: 'gallery', caption: '地铁会到站，我想一直坐在这趟车上。' },
+    { id: 'p14', file: 'photos/mmexport1783914057835.jpg', scene: 'wood', caption: '游乐园的镜子里，我们俩和身后的灯一起入画。' },
+    { id: 'p15', file: 'photos/1794407747125(1).jpg', scene: 'gallery', caption: '你穿红，我穿白，连手势都要凑成一对。' },
+    { id: 'p16', file: 'photos/mmexport1783914081986.jpg', scene: 'gallery', caption: '阳光很好，你很好，我偷偷从你身后探出头。' },
+    { id: 'p17', file: 'photos/bixin.jpg', scene: 'finale', caption: '两只手拼成的心，刚好装下我们。' }
+  ];
+
+  const PAIRS = [
+    { id: 'A', photoId: 'p02' },
+    { id: 'B', photoId: 'p06' },
+    { id: 'C', photoId: 'p08' },
+    { id: 'D', photoId: 'p14' }
+  ];
+
+  const LANTERNS = [
+    { photoId: 'p07', line: '你眨一下眼，我这边就亮了。' },
+    { photoId: 'p08', line: '你拿起麦克风，我就自动变成观众。' },
+    { photoId: 'p10', line: '人间烟火里，你回头找我的样子。' }
+  ];
+
+  const HERBS = [
+    { id: 'qinghao', label: '青蒿', element: '木', correct: true, note: '苦、辛，寒。清虚热，解暑热。你在实验室里认识过它——今夜它替你把春天种回来。' },
+    { id: 'jianghuang', label: '姜黄', element: '火', correct: true, note: '辛、苦，温。活血行气。你研究过它，它替你点一盏暖火。' },
+    { id: 'hehuan', label: '合欢', element: '心', correct: true, note: '甘，平。解郁安神。今夜把它放进方子里，愿她睡个好觉。' },
+    { id: 'danggui', label: '当归', element: '', correct: false, note: '甘、辛，温。补血活血。当归，当归，像在替谁念一句：该回来了。' },
+    { id: 'yuanzhi', label: '远志', element: '', correct: false, note: '苦、辛，温。安神益智。你走得远，也别忘了我在这儿。' },
+    { id: 'chenpi', label: '陈皮', element: '', correct: false, note: '苦、辛，温。理气健脾。放久了的心事，也该晒一晒。' },
+    { id: 'gouqi', label: '枸杞', element: '', correct: false, note: '甘，平。滋补肝肾。保温杯里泡两颗，是我能想到最朴素的关心。' },
+    { id: 'gancao', label: '甘草', element: '', correct: false, note: '甘，平。调和诸药。它不抢味，像我在你身边。' }
+  ];
+
+  const CAKES = [
+    { id: 'mango', label: '芒果千层', allergen: true, favorite: false },
+    { id: 'durian', label: '榴莲千层', allergen: false, favorite: true },
+    { id: 'strawberry', label: '草莓千层', allergen: false, favorite: false }
+  ];
+
+  const ALLERGENS = [
+    { id: 'mango', label: '芒果', correct: true },
+    { id: 'strawberry', label: '草莓', correct: false },
+    { id: 'cream', label: '奶油', correct: false }
+  ];
+
+  const LETTER = [
+    {
+      key: '初遇',
+      paragraphs: [
+        'Dearest Damara：',
+        '见字如面。',
+        '有人说，世间所有的相遇，都是久别重逢。遇见你之后，我便信了。原来这场看似寻常的相逢，是我们各自走了很久很久，才终于走到彼此面前。',
+        '你有一颗强大而温柔的心。而最令我倾心的，是你的思想——你总能望见我看不见的那一层，把寻常之事，讲出我从未想过的光景。每一次交心，听你认真说话，我总想懂得你更多，再更多一些。',
+        '还有你那份常人难以企及的共情。那些被你轻轻托住的瞬间，我都一一记着。是你让我明白，被人懂得，原是这世间最安稳的倚靠。'
+      ]
+    },
+    {
+      key: '此刻',
+      paragraphs: [
+        '亲爱的，有些话，最初相识时还能轻易说出口，如今反而很少说了，怕说得太轻，怕唐突了你。可今天，我想认真告诉你：',
+        '我爱你。不是一句随口的情话，而是这三个字背后全部的分量——是往后和你一起的每一顿饭、每一场日落、每一段起落，我都想与你共度。',
+        '这段时间发生了好多事。你太累了，身体不舒服，工作压力又大，还要准备面试。你习惯自己扛，自己默默找出口。我更想让你知道的是：恋人之间，本来就该相互扶持。',
+        '你常说，没有什么会永远，让我别期待太高。我明白，你怕期待落空，怕依赖之后再失望。我只想坦白：我对你的爱，和最开始不一样了。不是变淡，而是从那种你一冷淡我就焦虑、拼命讨好的热烈，开始学会变成了更稳的、想陪你走下去的确定，是认真想和你一起走到很久以后的决定。'
+      ]
+    },
+    {
+      key: '往后',
+      paragraphs: [
+        '你五行缺木与火。那今天，我就把春天和炉火都采来给你。',
+        '你做木，去生长，去做你想做的自己；你做火，去热烈，去照亮你想照亮的地方。我做大地——你飞得高，我在地上为你鼓掌；你飞累了想下来，我刚好接住你。',
+        '我一直觉得，恋爱不该是让你更有压力的战场，而该是你累极了能靠一靠的沙发。',
+        '山高水长，来日方长。命运把我们的路交织在一起，我便这样义无反顾地牵着你的手，慢慢走，也一直走下去。',
+        '生日快乐，我的米宝。',
+        '愿岁岁常相见，年年共此时。'
+      ]
+    }
+  ];
+
+  const SIGNATURE = ['你的奥利奥', '2026 年 11 月 14 日'];
+
+  const COPY = {
+    cover: {
+      title: '木火通明',
+      subtitle: '致米宝 · 生辰',
+      date: '二〇二六年十一月十四 · 天蝎座',
+      line: '饼干王国的雾，把他记着的事一片片收走了。',
+      ask: '他不记得她是谁了，只记得今天是她生日。你愿意陪他走完三段路，帮他把记忆找回来吗？',
+      note: '大约十分钟 · 累了随时可以停下，回来接着走',
+      start: '愿意',
+      startConfirm: '再点一次 · 清空重来',
+      resumePrefix: '继续上次'
+    },
+    wood: {
+      intro: '一张照片，配一句属于它的话。牌背「照」是照片，「文」是配文。',
+      needCaption: '再翻一句配文。',
+      needPhoto: '再翻一张照片。',
+      mismatch: '再想想，这句话说的是哪张照片？',
+      done: '木已成春。雾让开一条缝——山那边的渡口，在等一盏灯。',
+      next: '去点灯'
+    },
+    fire: { intro: '再点三盏灯，照一照现在的我们。', press: '长按点灯 · 按住别松手', done: '火已入心。', next: '去药圃' },
+    herbs: {
+      intro: '五行圆环缺了木与火，还要替她找一味安神的药。',
+      done: '木、火、心都齐了。',
+      recipeTitle: '木火安神方',
+      recipeHerbs: '青蒿 · 姜黄 · 合欢',
+      recipeLine: '这张方子不治病，只治我想你。',
+      next: '去云端'
+    },
+    parkour: {
+      title: '云端跑酷',
+      hint: '空格 / 点击 跳跃。掉下去也没关系，大米公主在云上。',
+      rescue: '奥利奥王子脚下一滑，掉了下去。云缝里伸出一只手——大米公主的魔法把他捞了回来。',
+      done: '云端尽头到了。她一直在看着你。',
+      next: '上山'
+    },
+    mountain: {
+      intro: '山风把雾吹开一点。他站在树下，手里攥着一条红丝带。',
+      placeholder: '比如：明年也要一起看山。',
+      submit: '系上',
+      hint: '',
+      empty: '先写一句再系上——写什么都行，哪怕只是「想见你」。',
+      done: '山听见了。红丝带系在最高那根枝上。雾散了——宫殿脚下，只剩最后一家还亮着灯的店。四样里，还差最后一样甜。',
+      next: '前往蛋糕店'
+    },
+    story: {
+      cover: { label: '序章 · 饼干王国', text: '饼干王国的奥利奥王子，只记得今天要去给大米公主米宝过生日。雾把他记得的一切收走了——她的样子、她说的话，都成了空白。兜里只剩一张羊皮纸，写着：十一月十四，米宝生日。纸背还有一行小字：赴宴要带四样——春天、灯、药、一块甜。雾只收走甜的，收不走疼的。' },
+      wood: { label: '第一幕 · 回忆森林', text: '第一幕，回忆森林。雾把去山那边的路封了，它只认她认得的东西。照片是雾唯一没收走的，湿漉漉地铺在落叶上，像谁翻乱的一叠旧信。他把照片和她的话对上，路才裂开一条缝。' },
+      fire: { label: '第一幕 · 夜市灯海', text: '第一幕还没走完。夜市是去山那边的渡口——渡口的船，只在灯亮的时候开。三盏都亮起来，船才认他。' },
+      herbs: { label: '第二幕 · 药圃', text: '第二幕，药圃。他想不起她最近过得怎样，只记得她总睡不实——所以船一靠岸，他先来这儿，替她配一包安神的药。方子缺三味：木、火、心。缺一样，云路就不载他。' },
+      parkour: { label: '第二幕 · 云端长廊', text: '第二幕还没走完。云路没有扶手，只认怀里抱着东西的人——他抱紧那包药，风把糖霜吹成雪。掉下去的那一瞬，有人伸手把他捞了回来：这一句，他也没忘。' },
+      mountain: { label: '第三幕 · 许愿山', text: '第三幕，许愿山。山门的规矩：空手空愿的人过不去；要替别人许一个愿，丝带系上，雾才散。红丝带都是别人写的，他攥着一条空的，笔尖悬着，像不敢替她做主——最后，他把笔放在你手边。' },
+      cake: { label: '第三幕 · 蛋糕店', text: '第三幕还没走完。赴宴不能空手，甜是最后一样。柜台玻璃上有一层薄雾，他先替她排掉不能碰的那块。' },
+      letter: { label: '终章 · 展信', text: '三段记忆合在一页。他退到一边，把话交给你。' },
+      finale: { label: '尾声 · 灯亮了', text: '灯亮了。她就在那里。' }
+    },
+    pause: {
+      act1: '第一幕到这里。可以先停——关掉也行，回来从这儿接着走。雾能拿走记忆，拿不走他往她那儿走的方向。',
+      act2: '第二幕到这里。累了就先歇一会儿，他还在云上等你。雾能拿走记忆，拿不走他往她那儿走的方向。'
+    },
+    memory: {
+      act1: {
+        label: '记忆 · 之一',
+        title: '她是谁',
+        lines: [
+          '有人说，世间所有的相遇，都是久别重逢。遇见你之后，我便信了。',
+          '你有一颗强大而温柔的心。而最令我倾心的，是你的思想——你总能望见我看不见的那一层。'
+        ],
+        button: '想起来了'
+      },
+      act2: {
+        label: '记忆 · 之二',
+        title: '她最近过得怎样',
+        lines: [
+          '这段时间发生了好多事。你太累了，身体不舒服，工作压力又大，还要准备面试。你习惯自己扛。',
+          '我更想让你知道的是：恋人之间，本来就该相互扶持。'
+        ],
+        button: '想起来了'
+      }
+    },
+    memoryNotes: ['第一幕里找回来的', '第二幕里找回来的', '终章里说出口的'],
+    cake: {
+      intro: '柜台上有三块蛋糕。奥利奥王子先要替她排除不能碰的那一块。',
+      qAllergy: '她皮肤碰到什么会过敏？',
+      wrongAllergy: '不是这个。再想想，碰一下就会痒的那一个。',
+      okAllergy: '对，芒果不行。你碰一下就会痒，他记得。',
+      qCake: '那她要吃哪一块？',
+      wrongCake: '她喜欢榴莲。再选一次。',
+      okCake: '对，榴莲千层。她喜欢这个。',
+      line: '你负责许愿，我负责记住你不能碰的东西。',
+      memoryLabel: '最后想起来的一件事',
+      memoryLines: [
+        '今年我生日，我说不用买蛋糕。',
+        '你不同意，坚持要去买——最后没买成。',
+        '可你当时那个样子，我到现在都记着。',
+        '所以这块，这次换我给你。'
+      ],
+      teaser: '蛋糕只能在这儿给你。真的那份，我留着当面递到你手上。',
+      carry: '蛋糕抱在怀里，还是温的。',
+      next: '带着蛋糕去见她'
+    },
+    letter: { open: '展信', next: '继续展信', all: '展开全文', close: '合卷' },
+    finale: {
+      candleHint: '长按吹灭蜡烛',
+      big: '生日快乐，米宝。',
+      small: '愿往后的每一年，都有今晚这样的灯。',
+      gift: '这一份提前两天送到；剩下的，等见面那天我亲手给你。',
+      reread: '再读一遍信',
+      restart: '从头开始'
+    },
+    audio: { on: '音乐 开', off: '音乐 关', unavailable: '音乐不可用' },
+    seals: { wood: '木', fire: '火' }
+  };
+
+  return { PHOTOS, PAIRS, LANTERNS, HERBS, CAKES, ALLERGENS, LETTER, SIGNATURE, COPY };
+});
+</script>
+  <script>(function (root, factory) {
+  if (typeof module === 'object' && module.exports) module.exports = factory();
+  else root.CORE = factory();
+})(typeof globalThis !== 'undefined' ? globalThis : this, function () {
+  const SCENES = ['cover', 'wood', 'fire', 'herbs', 'parkour', 'mountain', 'cake', 'letter', 'finale'];
+  const STORAGE_KEY = 'muhuotongming.v1';
+  const DEFAULT_WISH = '愿明年今日，我们还在一起。';
+
+  const createState = () => ({
+    scene: 'cover',
+    matchedPairs: [],
+    lanternsLit: [],
+    herbsFound: [],
+    wish: '',
+    allergySolved: false,
+    cakeChosen: '',
+    parkourDone: false,
+    letterRevealed: 0,
+    audioOn: false,
+    completed: false
+  });
+
+  const clone = (state) => JSON.parse(JSON.stringify(state));
+
+  const nextScene = (scene) => {
+    const i = SCENES.indexOf(scene);
+    return SCENES[Math.min(i + 1, SCENES.length - 1)];
+  };
+
+  const advance = (state) => {
+    const s = clone(state);
+    s.scene = nextScene(state.scene);
+    return s;
+  };
+
+  const recordMatch = (state, pairId, validPairIds) => {
+    if (!validPairIds.includes(pairId) || state.matchedPairs.includes(pairId)) return clone(state);
+    const s = clone(state);
+    s.matchedPairs.push(pairId);
+    return s;
+  };
+
+  const recordLantern = (state, index, total) => {
+    if (!Number.isInteger(index) || index < 0 || index >= total || state.lanternsLit.includes(index)) return clone(state);
+    const s = clone(state);
+    s.lanternsLit.push(index);
+    return s;
+  };
+
+  const recordHerb = (state, herbId, correctIds) => {
+    if (!correctIds.includes(herbId) || state.herbsFound.includes(herbId)) return clone(state);
+    const s = clone(state);
+    s.herbsFound.push(herbId);
+    return s;
+  };
+
+  const recordWish = (state, raw) => {
+    const s = clone(state);
+    const trimmed = String(raw == null ? '' : raw).trim().slice(0, 40);
+    s.wish = trimmed || DEFAULT_WISH;
+    return s;
+  };
+
+  const recordAllergy = (state) => {
+    const s = clone(state);
+    s.allergySolved = true;
+    return s;
+  };
+
+  const recordCake = (state, cakeId, validIds) => {
+    if (!validIds.includes(cakeId)) return clone(state);
+    const s = clone(state);
+    s.cakeChosen = cakeId;
+    return s;
+  };
+
+  const recordParkour = (state) => {
+    const s = clone(state);
+    s.parkourDone = true;
+    return s;
+  };
+
+  const revealLetter = (state, total) => {
+    const s = clone(state);
+    s.letterRevealed = Math.min(total, Math.max(0, state.letterRevealed + 1));
+    return s;
+  };
+
+  const markComplete = (state) => {
+    const s = clone(state);
+    s.completed = true;
+    return s;
+  };
+
+  const resumeLabel = (state) => {
+    if (!state) return null;
+    if (state.completed) return '再看一遍 · 尾声';
+    if (state.scene === 'cover') return null;
+    const i = SCENES.indexOf(state.scene);
+    if (i < 0) return null;
+    return `继续上次 · 第 ${i + 1} 幕`;
+  };
+
+  const validArray = (v, allowed) => Array.isArray(v) ? [...new Set(v)].filter((x) => allowed(x)) : [];
+
+  const hydrate = (raw) => {
+    const fresh = createState();
+    if (!raw) return fresh;
+    let parsed;
+    try { parsed = JSON.parse(raw); } catch { return fresh; }
+    if (!parsed || typeof parsed !== 'object') return fresh;
+    const s = fresh;
+    if (SCENES.includes(parsed.scene)) s.scene = parsed.scene;
+    s.matchedPairs = validArray(parsed.matchedPairs, (x) => typeof x === 'string');
+    s.lanternsLit = validArray(parsed.lanternsLit, (x) => Number.isInteger(x) && x >= 0 && x < 3);
+    s.herbsFound = validArray(parsed.herbsFound, (x) => x === 'qinghao' || x === 'jianghuang' || x === 'hehuan');
+    s.wish = typeof parsed.wish === 'string' ? parsed.wish.slice(0, 40) : '';
+    s.allergySolved = parsed.allergySolved === true;
+    s.cakeChosen = typeof parsed.cakeChosen === 'string' ? parsed.cakeChosen : '';
+    s.parkourDone = parsed.parkourDone === true;
+    s.letterRevealed = Math.min(3, Math.max(0, Number.isInteger(parsed.letterRevealed) ? parsed.letterRevealed : 0));
+    s.audioOn = parsed.audioOn === true;
+    s.completed = parsed.completed === true;
+    return s;
+  };
+
+  return {
+    SCENES, STORAGE_KEY, DEFAULT_WISH, createState, clone, nextScene,
+    advance, recordMatch, recordLantern, recordHerb, recordWish,
+    recordAllergy, recordCake, recordParkour, revealLetter, markComplete, resumeLabel, hydrate
+  };
+});
+</script>
+  <script>window.__ASSETS = {"photos":{"p01":"photos/p01.jpg","p02":"photos/p02.jpg","p03":"photos/p03.jpg","p04":"photos/p04.jpg","p05":"photos/p05.jpg","p06":"photos/p06.jpg","p07":"photos/p07.jpg","p08":"photos/p08.jpg","p09":"photos/p09.jpg","p10":"photos/p10.jpg","p11":"photos/p11.jpg","p12":"photos/p12.jpg","p13":"photos/p13.jpg","p14":"photos/p14.jpg","p15":"photos/p15.jpg","p16":"photos/p16.jpg","p17":"photos/p17.jpg"},"audio":"audio/song.mp3"};</script>
+  <script>
+  (function () {
+    'use strict';
+    const KEY = CORE.STORAGE_KEY;
+    const assets = window.__ASSETS;
+    const photoById = (id) => CONTENT.PHOTOS.find((p) => p.id === id);
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    let state = load();
+    state.audioOn = false;
+    let hadSave = false;
+    try { hadSave = !!localStorage.getItem(KEY); } catch {}
+    let started = false;
+    let bgAudio = null;
+    let audioCtx = null;
+
+    function load() {
+      let s;
+      try { s = CORE.hydrate(localStorage.getItem(KEY)); } catch { s = CORE.createState(); }
+      // hydrate 只管类型，这里再按内容白名单过一遍：手改或损坏的存档
+      // 只要凑够 4 个假 pair 就会"假通关"，必须先滤掉不存在的 id。
+      const pairIds = CONTENT.PAIRS.map((p) => p.id);
+      s.matchedPairs = s.matchedPairs.filter((id) => pairIds.includes(id));
+      if (!CONTENT.CAKES.some((c) => c.id === s.cakeChosen)) s.cakeChosen = '';
+      return s;
+    }
+    function save() {
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch {}
+    }
+    function setState(next) { state = next; save(); sync(); }
+
+    function storyBanner(key) {
+      const story = CONTENT.COPY.story[key];
+      // 六道关合并成三幕：点数和叙事都收，路径条只剩三个落点
+      const steps = { cover: 0, wood: 0, fire: 0, herbs: 1, parkour: 1, mountain: 2, cake: 2, letter: 3, finale: 3 };
+      const step = steps[key] || 0;
+      let path = '';
+      for (let i = 0; i < 3; i++) {
+        if (i === step) path += '<span class="journey-prince" aria-hidden="true"></span>';
+        path += `<span class="journey-dot ${i < step ? 'done' : ''}"></span>`;
+      }
+      if (step >= 3) path += '<span class="journey-prince" aria-hidden="true"></span>';
+      path += '<span class="journey-princess" aria-hidden="true"></span>';
+      return `<div class="story-banner"><p class="story-label">${story.label}</p><p class="story-text">${story.text}</p><div class="journey" aria-hidden="true">${path}</div></div>`;
+    }
+
+    function setStoryStatus(text, root = document) {
+      const el = root.querySelector('[data-testid="story-status"]');
+      if (el) el.textContent = text;
+    }
+
+    // 幕间记忆卡：第一、二幕收尾各弹一次，把这一段找回来的话先给她
+    const memoryVeil = $('[data-testid="memory-veil"]');
+    let memoryAfter = null;
+
+    function showMemory(key, after) {
+      const mem = CONTENT.COPY.memory[key];
+      if (!mem || !memoryVeil) { if (after) after(); return; }
+      $('[data-testid="memory-label"]', memoryVeil).textContent = mem.label;
+      $('[data-testid="memory-title"]', memoryVeil).textContent = mem.title;
+      $('[data-testid="memory-lines"]', memoryVeil).innerHTML = mem.lines.map((l) => `<p>${escapeHtml(l)}</p>`).join('');
+      $('[data-testid="memory-close"]', memoryVeil).textContent = mem.button;
+      memoryAfter = after || null;
+      memoryVeil.classList.remove('hidden');
+      requestAnimationFrame(() => memoryVeil.classList.add('show'));
+      chime(720);
+    }
+
+    function closeMemory() {
+      if (!memoryVeil || memoryVeil.classList.contains('hidden')) return;
+      memoryVeil.classList.remove('show');
+      const after = memoryAfter;
+      memoryAfter = null;
+      setTimeout(() => {
+        memoryVeil.classList.add('hidden');
+        $('[data-testid="memory-lines"]', memoryVeil).innerHTML = '';
+        if (after) after();
+      }, 400);
+    }
+
+    if (memoryVeil) $('[data-testid="memory-close"]', memoryVeil).addEventListener('click', closeMemory);
+
+    // 每幕收尾自动把视线带到"下一关"按钮（手机上一屏放不下，收尾按钮常在屏幕外）
+    function scrollToNext(panel, delay = 320) {
+      if (!panel) return;
+      setTimeout(() => {
+        const target = $('.done-wrap:not(.hidden)', panel)
+          || $('[data-testid="cake-done"]:not(.hidden)', panel)
+          || $('[data-testid="to-cake"]:not(.hidden)', panel);
+        if (target) target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, delay);
+    }
+
+    // 尾声：吹完蜡烛把视线带到双手比心那张照片（scroll-margin-top 让出顶部按钮的位置）
+    function scrollToEl(el, delay = 0) {
+      if (!el) return;
+      setTimeout(() => el.scrollIntoView({ block: 'start', behavior: 'smooth' }), delay);
+    }
+
+    function setScene(scene) {
+      started = true;
+      state.scene = scene;
+      save();
+      sync();
+      window.scrollTo(0, 0);
+      updateWoodMore();
+    }
+
+    function sync() {
+      const scene = started ? state.scene : 'cover';
+      $$('.scene').forEach((el) => el.classList.toggle('active', el.dataset.scene === scene));
+      const resume = $('[data-testid="resume"]');
+      const label = CORE.resumeLabel(state);
+      resume.classList.toggle('hidden', !label);
+      if (label) resume.textContent = label;
+      const sceneIndex = CORE.SCENES.indexOf(state.scene);
+      $('[data-testid="back"]').classList.toggle('hidden', !started || sceneIndex <= 1);
+      $('[data-testid="replay"]').classList.toggle('hidden', !started || state.scene === 'cover');
+      if (scene === 'wood' && typeof renderWood === 'function') renderWood();
+      if (scene === 'fire' && typeof renderFire === 'function') renderFire();
+      if (scene === 'herbs' && typeof renderHerbs === 'function') renderHerbs();
+      if (scene === 'parkour' && typeof renderParkour === 'function') renderParkour();
+      if (scene === 'mountain' && typeof renderMountain === 'function') renderMountain();
+      if (scene === 'cake' && typeof renderCake === 'function') renderCake();
+      if (scene === 'letter' && typeof renderLetter === 'function') renderLetter();
+      if (scene === 'finale' && typeof renderFinale === 'function') renderFinale();
+      if (typeof renderAudio === 'function') renderAudio();
+      if (scene === 'parkour' && typeof startParkour === 'function') startParkour();
+    }
+
+    function bindCover() {
+      const cover = CONTENT.COPY.cover;
+      $('[data-bind="title"]').textContent = cover.title;
+      $('[data-bind="subtitle"]').textContent = cover.subtitle;
+      $('[data-bind="date"]').textContent = cover.date;
+      $('[data-bind="line"]').textContent = cover.line;
+      $('[data-bind="ask"]').textContent = cover.ask;
+      $('[data-bind="note"]').textContent = cover.note;
+      $('[data-testid="start"]').textContent = cover.start;
+      $('#cover-story').innerHTML = storyBanner('cover');
+    }
+
+    async function toggleAudio() {
+      const btn = $('[data-testid="audio-toggle"]');
+      if (!bgAudio) {
+        try {
+          bgAudio = new Audio(assets.audio);
+          bgAudio.preload = 'none';
+          bgAudio.loop = true;
+          bgAudio.volume = 0;
+        } catch {
+          btn.textContent = CONTENT.COPY.audio.unavailable;
+          btn.disabled = true;
+          return;
+        }
+      }
+      state.audioOn = !state.audioOn;
+      btn.setAttribute('aria-pressed', String(state.audioOn));
+      btn.textContent = state.audioOn ? CONTENT.COPY.audio.on : CONTENT.COPY.audio.off;
+      save();
+      try {
+        if (state.audioOn) { await bgAudio.play(); fadeAudio(0.35); }
+        else fadeAudio(0);
+      } catch {
+        state.audioOn = false;
+        btn.setAttribute('aria-pressed', 'false');
+        btn.textContent = CONTENT.COPY.audio.unavailable;
+        btn.disabled = true;
+        save();
+      }
+    }
+    let fadeTimer = null;
+    function fadeAudio(target) {
+      if (!bgAudio) return;
+      clearInterval(fadeTimer);
+      fadeTimer = setInterval(() => {
+        const diff = target - bgAudio.volume;
+        if (Math.abs(diff) < 0.02) {
+          bgAudio.volume = target;
+          if (target === 0) bgAudio.pause();
+          clearInterval(fadeTimer);
+        } else {
+          bgAudio.volume = Math.min(1, Math.max(0, bgAudio.volume + diff * 0.18));
+        }
+      }, 40);
+    }
+
+    function chime(freq = 520) {
+      if (!state.audioOn) return;
+      try {
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine'; osc.frequency.value = freq;
+        gain.gain.setValueAtTime(0.0001, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.08, audioCtx.currentTime + 0.02);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.5);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.55);
+      } catch {}
+    }
+
+    function renderAudio() {
+      const btn = $('[data-testid="audio-toggle"]');
+      if (btn.disabled) return;
+      btn.setAttribute('aria-pressed', String(state.audioOn));
+      btn.textContent = state.audioOn ? CONTENT.COPY.audio.on : CONTENT.COPY.audio.off;
+    }
+
+    function makeFireflies() {
+      const wrap = $('#fireflies');
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      for (let i = 0; i < 18; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'firefly';
+        dot.style.left = `${Math.random() * 100}%`;
+        dot.style.top = `${20 + Math.random() * 70}%`;
+        dot.style.animationDelay = `${Math.random() * 6}s`;
+        dot.style.animationDuration = `${5 + Math.random() * 7}s`;
+        wrap.appendChild(dot);
+      }
+    }
+
+    function resetPanels() {
+      // 重开/重玩时把「上一轮留下的交互状态」一并清掉，否则会出现
+      // 木幕翻了一半的牌点不动、尾声蜡烛点不着这类残留问题。
+      woodFirst = null;
+      woodLocked = false;
+      if (firePress) { clearTimeout(firePress); firePress = null; }
+      if (candleTimer) { clearTimeout(candleTimer); candleTimer = null; }
+      $$('.panel').forEach((p) => {
+        p.dataset.ready = '';
+        p.innerHTML = '';
+        p.classList.remove('candle-out');
+      });
+    }
+
+    function replayLevel() {
+      const scene = state.scene;
+      if (scene === 'cover') return;
+      if (scene === 'parkour' && typeof stopParkour === 'function') stopParkour();
+      const s = CORE.clone(state);
+      if (scene === 'wood') s.matchedPairs = [];
+      if (scene === 'fire') s.lanternsLit = [];
+      if (scene === 'herbs') s.herbsFound = [];
+      if (scene === 'parkour') s.parkourDone = false;
+      if (scene === 'mountain') s.wish = '';
+      if (scene === 'cake') { s.allergySolved = false; s.cakeChosen = ''; }
+      if (scene === 'letter') s.letterRevealed = 0;
+      if (scene === 'finale') s.completed = false;
+      state = s;
+      save();
+      resetPanels();
+      setScene(scene);
+    }
+
+    const woodPanel = $('#wood-panel');
+    let woodFirst = null;
+    let woodLocked = false;
+
+    function woodCardHtml(kind, photo, pairId) {
+      const isPhoto = kind === 'photo';
+      return `
+        <button class="card" data-testid="card-${kind}-${photo.id}" data-photo="${photo.id}" data-pair="${pairId}" data-kind="${kind}" aria-label="${isPhoto ? '照片卡' : '配文卡'}">
+          <span class="card-inner">
+            <span class="card-face card-back">${isPhoto ? '照' : '文'}</span>
+            <span class="card-face ${isPhoto ? 'card-photo' : 'card-text'}">
+              ${isPhoto ? `<img src="${assets.photos[photo.id]}" alt="${photo.caption}" loading="lazy">` : `<span class="caption-quote">${photo.caption}</span>`}
+            </span>
+          </span>
+        </button>`;
+    }
+
+    function renderWood() {
+      if (!woodPanel || woodPanel.dataset.ready === '1') return;
+      woodPanel.dataset.ready = '1';
+      const cards = CONTENT.PAIRS.flatMap((pair) => {
+        const photo = photoById(pair.photoId);
+        return [
+          { kind: 'photo', photo, pairId: pair.id },
+          { kind: 'caption', photo, pairId: pair.id }
+        ];
+      });
+      cards.sort(() => Math.random() - 0.5);
+      woodPanel.innerHTML = `
+        ${storyBanner('wood')}
+        <h2 class="scene-title">木 · 初遇</h2>
+        <p class="scene-sub">${CONTENT.COPY.wood.intro}</p>
+        <p class="story-status" data-testid="story-status"></p>
+        <div class="wood-progress" data-testid="wood-progress" aria-label="木的进度">
+          ${CONTENT.PAIRS.map((_, i) => `<span class="dot" data-dot="${i}"></span>`).join('')}
+        </div>
+        <p class="wood-message" data-testid="wood-message" aria-live="polite"></p>
+        <div class="wood-grid">${cards.map((c) => woodCardHtml(c.kind, c.photo, c.pairId)).join('')}</div>
+        <div class="done-wrap hidden" data-testid="wood-done">
+          <div class="seal wood show">木</div>
+          <p class="done-line">${CONTENT.COPY.wood.done}</p>
+          <button class="btn btn-primary" data-testid="wood-next">${CONTENT.COPY.wood.next}</button>
+        </div>`;
+      woodPanel.onclick = onWoodClick;
+      restoreWood();
+      if (state.matchedPairs.length === CONTENT.PAIRS.length) setStoryStatus('记忆森林的路开了。他往夜市走去。', woodPanel);
+      else if (state.matchedPairs.length > 0) setStoryStatus('他把找到的回忆收进背包，继续找下一段。', woodPanel);
+      else setStoryStatus('奥利奥王子蹲在记忆森林里，先捡起一张照片。', woodPanel);
+      // 牌阵比一屏高时，给一个"往下滑"的提示；她已经滑下去或又翻回上面就收起来
+      setTimeout(updateWoodMore, 260);
+    }
+
+    function updateWoodMore() {
+      const cue = $('[data-testid="scroll-cue"]');
+      if (!cue) return;
+      if (state.scene !== 'wood') { cue.classList.add('hidden'); return; }
+      const cards = $$('.card', woodPanel);
+      if (!cards.length) { cue.classList.add('hidden'); return; }
+      // 牌阵没整块露出来就提示：整张还在屏下的数出来，只露半排的就给一句通用的
+      const rects = cards.map((c) => c.getBoundingClientRect());
+      const belowCount = rects.filter((r) => r.top > window.innerHeight - 8).length;
+      const cut = rects.some((r) => r.bottom > window.innerHeight - 8);
+      if (!cut) { cue.classList.add('hidden'); return; }
+      cue.textContent = belowCount ? `↓ 下面还有 ${belowCount} 张牌，往下滑` : '↓ 下面还有牌，往下滑';
+      cue.classList.remove('hidden');
+    }
+
+    function restoreWood() {
+      if (!woodPanel) return;
+      $$('.card', woodPanel).forEach((card) => {
+        if (state.matchedPairs.includes(card.dataset.pair)) card.classList.add('matched', 'flipped');
+      });
+      checkWoodDone();
+    }
+
+    function onWoodClick(e) {
+      const card = e.target.closest('.card');
+      if (!card || woodLocked || card.classList.contains('matched')) return;
+      if (!woodFirst) {
+        woodFirst = card;
+        card.classList.add('flipped');
+        setWoodMessage(card.dataset.kind === 'photo' ? CONTENT.COPY.wood.needCaption : CONTENT.COPY.wood.needPhoto);
+        chime(460);
+        return;
+      }
+      if (woodFirst === card) return;
+      if (woodFirst.dataset.kind === card.dataset.kind) {
+        setWoodMessage(card.dataset.kind === 'photo' ? CONTENT.COPY.wood.needCaption : CONTENT.COPY.wood.needPhoto);
+        chime(320);
+        return;
+      }
+      card.classList.add('flipped');
+      const first = woodFirst;
+      woodFirst = null;
+      if (first.dataset.pair === card.dataset.pair) {
+        first.classList.add('matched');
+        card.classList.add('matched');
+        setState(CORE.recordMatch(state, card.dataset.pair, CONTENT.PAIRS.map((p) => p.id)));
+        setWoodMessage('配上了。');
+        chime(700);
+        checkWoodDone();
+        if (state.matchedPairs.length === CONTENT.PAIRS.length) scrollToNext(woodPanel);
+        if (state.matchedPairs.length === CONTENT.PAIRS.length) setStoryStatus('记忆森林的路开了。他往夜市走去。', woodPanel);
+        else setStoryStatus('又一段回忆对上了。他把照片收进背包。', woodPanel);
+        return;
+      }
+      woodLocked = true;
+      setWoodMessage(CONTENT.COPY.wood.mismatch);
+      setTimeout(() => {
+        first.classList.remove('flipped');
+        card.classList.remove('flipped');
+        woodLocked = false;
+      }, 750);
+      chime(300);
+    }
+
+    function setWoodMessage(text) {
+      const msg = $('[data-testid="wood-message"]', woodPanel);
+      if (msg) msg.textContent = text;
+    }
+
+    function checkWoodDone() {
+      $$('[data-dot]', woodPanel).forEach((dot, i) => dot.classList.toggle('lit', i < state.matchedPairs.length));
+      const done = $('[data-testid="wood-done"]', woodPanel);
+      if (!done) return;
+      const complete = state.matchedPairs.length === CONTENT.PAIRS.length;
+      done.classList.toggle('hidden', !complete);
+      if (complete && !done.dataset.bound) {
+        done.dataset.bound = '1';
+        $('[data-testid="wood-next"]', done).addEventListener('click', () => setScene('fire'));
+      }
+    }
+
+    const firePanel = $('#fire-panel');
+    let firePress = null;
+
+    function renderFire() {
+      if (!firePanel || firePanel.dataset.ready === '1') return;
+      firePanel.dataset.ready = '1';
+      firePanel.innerHTML = `
+        ${storyBanner('fire')}
+        <h2 class="scene-title fire-title">火 · 此刻</h2>
+        <p class="scene-sub fire-sub">${CONTENT.COPY.fire.intro}</p>
+        <p class="story-status" data-testid="story-status"></p>
+        <div class="lantern-row">
+          ${CONTENT.LANTERNS.map((l, i) => `
+            <button class="lantern" data-testid="lantern-${i}" data-lantern="${i}" aria-label="点亮第 ${i + 1} 盏心灯">
+              <span class="lantern-body"><span class="flame"></span></span>
+              <span class="lantern-photo"><img src="${assets.photos[l.photoId]}" alt="${l.line}"><span>${l.line}</span></span>
+            </button>`).join('')}
+        </div>
+        <p class="lantern-hint">${CONTENT.COPY.fire.press}</p>
+        <div class="done-wrap hidden" data-testid="fire-done">
+          <div class="seal fire show">火</div>
+          <p class="done-line">${CONTENT.COPY.fire.done}</p>
+          <p class="pause-hint">${CONTENT.COPY.pause.act1}</p>
+          <button class="btn btn-fire" data-testid="fire-next">${CONTENT.COPY.fire.next}</button>
+        </div>`;
+      bindLanterns();
+      restoreFire();
+      if (state.lanternsLit.length === CONTENT.LANTERNS.length) setStoryStatus('整条夜市都亮了。他看见了远处的山。', firePanel);
+      else if (state.lanternsLit.length > 0) setStoryStatus(`第 ${state.lanternsLit.length} 盏灯亮了。`, firePanel);
+      else setStoryStatus('他提着灯走进夜市，一盏一盏点亮。', firePanel);
+    }
+
+    function bindLanterns() {
+      $$('.lantern', firePanel).forEach((el) => {
+        const index = Number(el.dataset.lantern);
+        const start = () => beginPress(el, index);
+        const end = () => endPress(el);
+        el.addEventListener('pointerdown', (e) => { e.preventDefault(); start(); });
+        el.addEventListener('pointerup', end);
+        el.addEventListener('pointerleave', end);
+        el.addEventListener('pointercancel', end);
+        el.addEventListener('keydown', (e) => {
+          if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); start(); }
+        });
+        el.addEventListener('keyup', (e) => {
+          if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); end(); }
+        });
+      });
+    }
+
+    function beginPress(el, index) {
+      if (el.classList.contains('lit') || firePress) return;
+      el.classList.add('heating');
+      firePress = setTimeout(() => {
+        el.classList.remove('heating');
+        el.classList.add('lit');
+        firePress = null;
+        setState(CORE.recordLantern(state, index, CONTENT.LANTERNS.length));
+        chime(620 + index * 80);
+        checkFireDone();
+        if (state.lanternsLit.length === CONTENT.LANTERNS.length) { setStoryStatus('整条夜市都亮了。他看见了远处的山。', firePanel); scrollToNext(firePanel); }
+        else setStoryStatus(`第 ${state.lanternsLit.length} 盏灯亮了。`, firePanel);
+      }, 800);
+    }
+
+    function endPress(el) {
+      if (firePress) { clearTimeout(firePress); firePress = null; }
+      el.classList.remove('heating');
+    }
+
+    function restoreFire() {
+      state.lanternsLit.forEach((i) => {
+        const el = $(`[data-lantern="${i}"]`, firePanel);
+        if (el) el.classList.add('lit');
+      });
+      checkFireDone();
+    }
+
+    function checkFireDone() {
+      const done = $('[data-testid="fire-done"]', firePanel);
+      if (!done) return;
+      const complete = state.lanternsLit.length === CONTENT.LANTERNS.length;
+      done.classList.toggle('hidden', !complete);
+      if (complete && !done.dataset.bound) {
+        done.dataset.bound = '1';
+        $('[data-testid="fire-next"]', done).addEventListener('click', () => showMemory('act1', () => setScene('herbs')));
+      }
+    }
+
+    const herbsPanel = $('#herbs-panel');
+    const ELEMENTS = ['水', '木', '火', '土', '金'];
+
+    function renderHerbs() {
+      if (!herbsPanel || herbsPanel.dataset.ready === '1') return;
+      herbsPanel.dataset.ready = '1';
+      herbsPanel.innerHTML = `
+        <div class="herb-bg" style="background-image:linear-gradient(rgba(244,236,221,.93),rgba(244,236,221,.97)),url('${assets.photos.p04}')"></div>
+        <div class="herb-content">
+          ${storyBanner('herbs')}
+          <h2 class="scene-title">药圃 · 木火方</h2>
+          <p class="scene-sub">${CONTENT.COPY.herbs.intro}</p>
+          <p class="missing-line" data-testid="missing-line">还缺：木 · 火 · 心</p>
+          <p class="story-status" data-testid="story-status"></p>
+          <div class="herb-layout">
+            <div class="element-ring" aria-label="五行相生圆环">
+              ${ELEMENTS.map((el, i) => `<span class="element-node ${el === '木' || el === '火' ? 'missing' : 'present'}" data-element="${el}" style="--i:${i}">${el}</span>`).join('')}
+              <span class="heart-node missing" data-testid="heart-node">心</span>
+            </div>
+            <div class="herb-list">
+              ${CONTENT.HERBS.map((h) => `
+                <button class="herb" data-testid="herb-${h.id}" data-herb="${h.id}">
+                  <span class="herb-name">${h.label}</span>
+                  <span class="herb-element"></span>
+                </button>`).join('')}
+              <p class="herb-note" data-testid="herb-note" aria-live="polite"></p>
+            </div>
+          </div>
+          <div class="done-wrap hidden" data-testid="herbs-done">
+            <div class="prescription" data-testid="prescription">
+              <p class="prescription-title">${CONTENT.COPY.herbs.recipeTitle}</p>
+              <p class="prescription-herbs">${CONTENT.COPY.herbs.recipeHerbs}</p>
+              <p class="prescription-line">${CONTENT.COPY.herbs.recipeLine}</p>
+            </div>
+            <p class="done-line">${CONTENT.COPY.herbs.done}</p>
+            <button class="btn btn-primary" data-testid="herbs-next">${CONTENT.COPY.herbs.next}</button>
+          </div>
+        </div>`;
+      herbsPanel.onclick = onHerbClick;
+      restoreHerbs();
+      if (state.herbsFound.length === 3) setStoryStatus('方子齐了。他把药包好，往云端走。', herbsPanel);
+      else if (state.herbsFound.length > 0) setStoryStatus('药篓里已经有几味了。他继续辨认。', herbsPanel);
+      else setStoryStatus('他把药篓放在脚边，开始替她辨认。', herbsPanel);
+    }
+
+    function onHerbClick(e) {
+      const btn = e.target.closest('.herb');
+      if (!btn) return;
+      const herb = CONTENT.HERBS.find((h) => h.id === btn.dataset.herb);
+      $('[data-testid="herb-note"]', herbsPanel).textContent = herb.note;
+      if (herb.correct && state.herbsFound.includes(herb.id)) {
+        // 已经放进药篓的药材，再点一次只说"已经"了
+        btn.classList.add('found');
+        chime(360);
+        return;
+      }
+      if (herb.correct) {
+        const correctIds = CONTENT.HERBS.filter((h) => h.correct).map((h) => h.id);
+        setState(CORE.recordHerb(state, herb.id, correctIds));
+        btn.classList.add('found');
+        chime(660);
+        restoreHerbs();
+        if (state.herbsFound.length === 3) { setStoryStatus('方子齐了。他把药包好，往云端走。', herbsPanel); scrollToNext(herbsPanel); }
+        else setStoryStatus(`药篓里多了${herb.label}。`, herbsPanel);
+      } else {
+        chime(320);
+      }
+    }
+
+    function restoreHerbs() {
+      const correctByElement = { 木: 'qinghao', 火: 'jianghuang' };
+      $$('.element-node', herbsPanel).forEach((node) => {
+        const el = node.dataset.element;
+        const herbId = correctByElement[el];
+        const found = !!(herbId && state.herbsFound.includes(herbId));
+        node.classList.toggle('filled', found);
+        if (el === '木' || el === '火') {
+          node.classList.toggle('missing', !found);
+          node.classList.remove('present');
+        } else {
+          node.classList.add('present');
+          node.classList.remove('missing');
+        }
+      });
+      state.herbsFound.forEach((id) => {
+        const btn = $(`[data-herb="${id}"]`, herbsPanel);
+        if (!btn) return;
+        btn.classList.add('found');
+        // 药材属什么，采到之后才揭晓——找的时候只能靠名字和"还缺什么"
+        const tag = $('.herb-element', btn);
+        const herb = CONTENT.HERBS.find((h) => h.id === id);
+        if (tag && herb && herb.element) tag.textContent = herb.element;
+      });
+      const heartFound = state.herbsFound.includes('hehuan');
+      const heart = $('[data-testid="heart-node"]', herbsPanel);
+      if (heart) {
+        heart.classList.toggle('filled', heartFound);
+        heart.classList.toggle('missing', !heartFound);
+      }
+      const missing = [];
+      if (!state.herbsFound.includes('qinghao')) missing.push('木');
+      if (!state.herbsFound.includes('jianghuang')) missing.push('火');
+      if (!state.herbsFound.includes('hehuan')) missing.push('心');
+      const missingLine = $('[data-testid="missing-line"]', herbsPanel);
+      if (missingLine) missingLine.textContent = missing.length ? `还缺：${missing.join(' · ')}` : '药方齐了。';
+      const done = $('[data-testid="herbs-done"]', herbsPanel);
+      const complete = state.herbsFound.length === 3;
+      const ringComplete = state.herbsFound.includes('qinghao') && state.herbsFound.includes('jianghuang');
+      $('.element-ring', herbsPanel).classList.toggle('complete', ringComplete);
+      done.classList.toggle('hidden', !complete);
+      if (complete && !done.dataset.bound) {
+        done.dataset.bound = '1';
+        $('[data-testid="herbs-next"]', done).addEventListener('click', () => setScene('parkour'));
+      }
+    }
+
+    const parkourPanel = $('#parkour-panel');
+    const parkour = {
+      canvas: null, ctx: null, raf: null, running: false, last: 0,
+      princeX: 150, princeY: 206, vy: 0, w: 44, h: 44, groundY: 250,
+      speed: 4.1, distance: 0, target: 3800, obstacles: [], spawnAt: 700,
+      coyote: 0, jumpBuffer: 0, jumpHeld: false, squash: 0,
+      stars: [], starsGot: 0, starSpawnAt: 900, starsSpawned: 0,
+      rescuing: false, rescueFrames: 0, invincible: 0, done: false
+    };
+
+    function renderParkour() {
+      if (!parkourPanel || parkourPanel.dataset.ready === '1') return;
+      parkourPanel.dataset.ready = '1';
+      parkourPanel.innerHTML = `
+        ${storyBanner('parkour')}
+        <h2 class="scene-title">${CONTENT.COPY.parkour.title}</h2>
+        <p class="scene-sub">${CONTENT.COPY.parkour.hint}</p>
+        <p class="story-status" data-testid="story-status"></p>
+        <div class="parkour-wrap">
+          <canvas class="parkour-canvas" data-testid="parkour-canvas" width="900" height="320" tabindex="0"></canvas>
+          <div class="parkour-rescue hidden" data-testid="parkour-rescue">${CONTENT.COPY.parkour.rescue}</div>
+        </div>
+        <p class="parkour-score" data-testid="parkour-score">路程 0 / 100 · 星光 0 / 3</p>
+        <div class="done-wrap hidden" data-testid="parkour-done">
+          <div class="seal fire show">云</div>
+          <p class="done-line">${CONTENT.COPY.parkour.done}</p>
+          <p class="pause-hint">${CONTENT.COPY.pause.act2}</p>
+          <button class="btn btn-primary" data-testid="parkour-next">${CONTENT.COPY.parkour.next}</button>
+        </div>`;
+      const canvas = $('[data-testid="parkour-canvas"]', parkourPanel);
+      parkour.canvas = canvas;
+      parkour.ctx = canvas.getContext('2d');
+      canvas.addEventListener('pointerdown', (e) => { e.preventDefault(); parkourJump(); });
+      canvas.addEventListener('pointerup', parkourRelease);
+      canvas.addEventListener('pointercancel', parkourRelease);
+      canvas.addEventListener('pointerleave', parkourRelease);
+      parkour.done = state.parkourDone;
+      resetParkour();
+      if (state.parkourDone) finishParkour(false);
+      else setStoryStatus('他抱着蛋糕，跑上云端长廊。', parkourPanel);
+    }
+
+    function resetParkour() {
+      parkour.last = 0;
+      parkour.princeY = parkour.groundY - parkour.h;
+      parkour.vy = 0;
+      parkour.distance = 0;
+      parkour.obstacles = [];
+      parkour.spawnAt = 700;
+      parkour.rescuing = false;
+      parkour.rescueFrames = 0;
+      parkour.invincible = 0;
+      parkour.done = false;
+      parkour.coyote = 0;
+      parkour.jumpBuffer = 0;
+      parkour.jumpHeld = false;
+      parkour.squash = 0;
+      parkour.stars = [];
+      parkour.starsGot = 0;
+      parkour.starSpawnAt = 900;
+      parkour.starsSpawned = 0;
+      hideRescue();
+      drawParkour();
+      updateParkourScore();
+    }
+
+    function startParkour() {
+      if (!parkour.canvas || state.parkourDone) return;
+      if (parkour.running) return;
+      parkour.running = true;
+      parkour.raf = requestAnimationFrame(parkourLoop);
+    }
+
+    function stopParkour() {
+      parkour.running = false;
+      if (parkour.raf) { cancelAnimationFrame(parkour.raf); parkour.raf = null; }
+    }
+
+    function parkourLoop(now) {
+      if (!parkour.running) return;
+      if (!started || state.scene !== 'parkour') { parkour.running = false; return; }
+      // 按真实时间步进：一帧 = 1，60Hz 基准。30/120Hz 屏幕下路程和手感一致。
+      const dt = parkour.last ? Math.min(2, Math.max(0.25, (now - parkour.last) / 16.6667)) : 1;
+      parkour.last = now;
+      updateParkour(dt);
+      drawParkour();
+      parkour.raf = requestAnimationFrame(parkourLoop);
+    }
+
+    function onParkourGround() {
+      return parkour.princeY >= parkour.groundY - parkour.h - 0.5;
+    }
+
+    function doParkourJump() {
+      parkour.vy = -12.5;
+      parkour.coyote = 0;
+      parkour.jumpBuffer = 0;
+      parkour.squash = -0.2;
+      chime(600);
+    }
+
+    function updateParkour(dt = 1) {
+      if (parkour.done) return;
+      if (parkour.rescuing) {
+        parkour.rescueFrames -= dt;
+        if (parkour.rescueFrames <= 0) {
+          parkour.rescuing = false;
+          parkour.princeY = parkour.groundY - parkour.h;
+          parkour.vy = 0;
+          parkour.invincible = 90;
+          parkour.obstacles = parkour.obstacles.filter((o) => o.x > 360);
+          hideRescue();
+        }
+        return;
+      }
+      parkour.distance += parkour.speed * dt;
+      if (parkour.distance >= parkour.target) { finishParkour(true); return; }
+      if (parkour.invincible > 0) parkour.invincible -= dt;
+      parkour.coyote = onParkourGround() ? 6 : Math.max(0, parkour.coyote - dt);
+      if (parkour.jumpBuffer > 0) {
+        parkour.jumpBuffer -= dt;
+        if (onParkourGround() || parkour.coyote > 0) doParkourJump();
+      }
+      if (!parkour.jumpHeld && parkour.vy < -3) parkour.vy += 0.9 * dt;
+      parkour.princeY += parkour.vy * dt;
+      parkour.vy += 0.6 * dt;
+      if (parkour.princeY >= parkour.groundY - parkour.h) {
+        parkour.princeY = parkour.groundY - parkour.h;
+        if (parkour.vy > 3) parkour.squash = 0.22;
+        parkour.vy = 0;
+      }
+      parkour.squash *= Math.pow(0.86, dt);
+      if (parkour.distance >= parkour.spawnAt) {
+        parkour.spawnAt += 330 + Math.random() * 120;
+        const types = [
+          { type: 'pin', w: 52, h: 26 },
+          { type: 'milk', w: 56, h: 14 },
+          { type: 'cake', w: 46, h: 30 }
+        ];
+        const t = types[Math.floor(Math.random() * types.length)];
+        parkour.obstacles.push({ ...t, x: 940 });
+      }
+      if (parkour.starsSpawned < 3 && parkour.distance >= parkour.starSpawnAt) {
+        parkour.starsSpawned += 1;
+        parkour.starSpawnAt += 900;
+        parkour.stars.push({ x: 940, y: 150 + Math.random() * 55, got: false });
+      }
+      for (const o of parkour.obstacles) o.x -= parkour.speed * dt;
+      for (const s of parkour.stars) s.x -= parkour.speed * dt;
+      parkour.obstacles = parkour.obstacles.filter((o) => o.x > -120);
+      const px1 = parkour.princeX, px2 = px1 + parkour.w;
+      const py2 = parkour.princeY + parkour.h;
+      if (parkour.invincible <= 0) {
+        for (const o of parkour.obstacles) {
+          const ox1 = o.x, ox2 = o.x + o.w;
+          const oy = parkour.groundY - o.h;
+          if (px2 > ox1 && px1 < ox2 && py2 > oy + 6) {
+            triggerRescue();
+            break;
+          }
+        }
+      }
+      const cx = parkour.princeX + parkour.w / 2;
+      const cy = parkour.princeY + parkour.h / 2;
+      for (const s of parkour.stars) {
+        if (!s.got && Math.abs(s.x - cx) < 26 && Math.abs(s.y - cy) < 30) {
+          s.got = true;
+          parkour.starsGot += 1;
+          setStoryStatus('他接住了一颗星光。', parkourPanel);
+          chime(880);
+        }
+      }
+      parkour.stars = parkour.stars.filter((s) => !s.got && s.x > -50);
+      updateParkourScore();
+    }
+
+    function parkourJump() {
+      if (!parkour.running || parkour.done || parkour.rescuing) return;
+      parkour.jumpHeld = true;
+      if (onParkourGround() || parkour.coyote > 0) doParkourJump();
+      else parkour.jumpBuffer = 8;
+    }
+
+    function parkourRelease() {
+      parkour.jumpHeld = false;
+    }
+
+    function triggerRescue() {
+      if (parkour.rescuing || parkour.done) return;
+      parkour.rescuing = true;
+      parkour.rescueFrames = 90;
+      parkour.vy = 0;
+      const el = $('[data-testid="parkour-rescue"]', parkourPanel);
+      if (el) el.classList.remove('hidden');
+      setStoryStatus('大米公主把他捞了回来。他拍拍身上的云，继续跑。', parkourPanel);
+      chime(520);
+    }
+
+    function hideRescue() {
+      const el = $('[data-testid="parkour-rescue"]', parkourPanel);
+      if (el) el.classList.add('hidden');
+    }
+
+    function updateParkourScore() {
+      const el = $('[data-testid="parkour-score"]', parkourPanel);
+      if (!el) return;
+      const pct = Math.min(100, Math.floor((parkour.distance / parkour.target) * 100));
+      el.textContent = `路程 ${pct} / 100 · 星光 ${parkour.starsGot} / 3`;
+    }
+
+    function finishParkour(mark) {
+      parkour.done = true;
+      parkour.running = false;
+      parkour.rescuing = false;
+      parkour.rescueFrames = 0;
+      if (parkour.raf) { cancelAnimationFrame(parkour.raf); parkour.raf = null; }
+      hideRescue();
+      drawParkour();
+      if (mark) setState(CORE.recordParkour(state));
+      const done = $('[data-testid="parkour-done"]', parkourPanel);
+      if (done) {
+        done.classList.remove('hidden');
+        const next = $('[data-testid="parkour-next"]', done);
+        if (next && !next.dataset.bound) {
+          next.dataset.bound = '1';
+          next.addEventListener('click', () => showMemory('act2', () => setScene('mountain')));
+        }
+        scrollToNext(parkourPanel, 0);      }
+      const score = $('[data-testid="parkour-score"]', parkourPanel);
+      if (score) score.textContent = `路程 100 / 100 · 星光 ${parkour.starsGot} / 3`;
+      const doneLine = $('.done-line', parkourPanel);
+      if (doneLine) {
+        doneLine.textContent = parkour.starsGot >= 3
+          ? '云端尽头到了。三颗星光他都接住了，这一路的云一起亮了。'
+          : parkour.starsGot > 0
+            ? `云端尽头到了。他带着 ${parkour.starsGot} 颗星光，看见她在灯下等他。`
+            : CONTENT.COPY.parkour.done;
+      }
+      setStoryStatus('他到了云端尽头，看见她在灯下等他。', parkourPanel);
+      chime(700);
+    }
+
+    function drawParkour() {
+      const ctx = parkour.ctx;
+      if (!ctx) return;
+      const W = 900, H = 320, ground = parkour.groundY;
+      const sky = ctx.createLinearGradient(0, 0, 0, H);
+      sky.addColorStop(0, '#1B2340');
+      sky.addColorStop(0.55, '#4B3A5A');
+      sky.addColorStop(1, '#E8B98A');
+      ctx.fillStyle = sky; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = 'rgba(255,248,220,.7)';
+      for (let i = 0; i < 40; i++) {
+        const x = (i * 137 + 43) % W;
+        const y = (i * 73 + 21) % 170;
+        ctx.beginPath(); ctx.arc(x, y, 1.2, 0, Math.PI * 2); ctx.fill();
+      }
+      const shift = parkour.distance * 0.35;
+      ctx.fillStyle = 'rgba(255,248,236,.24)';
+      for (let i = 0; i < 5; i++) {
+        const x = ((i * 240 - shift) % (W + 240) + W + 240) % (W + 240) - 120;
+        const y = 60 + (i % 3) * 38;
+        ctx.beginPath();
+        ctx.ellipse(x, y, 58, 20, 0, 0, Math.PI * 2);
+        ctx.ellipse(x + 40, y - 10, 38, 16, 0, 0, Math.PI * 2);
+        ctx.ellipse(x - 38, y - 6, 32, 14, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.fillStyle = 'rgba(120,80,58,.45)';
+      for (let i = 0; i < 4; i++) {
+        const x = ((i * 300 - shift * 0.6) % (W + 300) + W + 300) % (W + 300) - 150;
+        ctx.beginPath(); ctx.arc(x, ground + 30, 120, Math.PI, 0); ctx.fill();
+      }
+      ctx.fillStyle = '#F3D9B8';
+      ctx.beginPath();
+      ctx.moveTo(0, ground);
+      for (let x = 0; x <= W; x += 30) {
+        ctx.quadraticCurveTo(x + 15, ground - 10, x + 30, ground);
+      }
+      ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = 'rgba(178,59,46,.18)';
+      ctx.fillRect(0, ground + 18, W, 4);
+      for (const o of parkour.obstacles) drawObstacle(ctx, o, ground);
+      for (const s of parkour.stars) drawStar(ctx, s.x, s.y, 12);
+      drawPrincess(ctx, 450, 46);
+      if (parkour.rescuing) {
+        ctx.strokeStyle = 'rgba(255,170,170,.85)';
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(450, 80);
+        ctx.quadraticCurveTo(300, 160, parkour.princeX + 22, parkour.princeY - 20);
+        ctx.stroke();
+        ctx.fillStyle = 'rgba(255,220,220,.25)';
+        ctx.beginPath(); ctx.arc(parkour.princeX + 22, parkour.princeY - 20, 40, 0, Math.PI * 2); ctx.fill();
+      }
+      const air = Math.max(0, (ground - parkour.h) - parkour.princeY);
+      const shadowW = Math.max(12, 26 - air / 10);
+      ctx.fillStyle = `rgba(42,42,36,${Math.max(.08, .24 - air / 600)})`;
+      ctx.beginPath(); ctx.ellipse(parkour.princeX + parkour.w / 2, ground - 2, shadowW, 6, 0, 0, Math.PI * 2); ctx.fill();
+      drawPrince(ctx, parkour.princeX, parkour.rescuing ? parkour.princeY - 50 : parkour.princeY, parkour.w, parkour.h);
+    }
+
+    function drawStar(ctx, x, y, r) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.beginPath();
+      for (let i = 0; i < 10; i++) {
+        const a = -Math.PI / 2 + i * Math.PI / 5;
+        const rr = i % 2 ? r * 0.45 : r;
+        ctx.lineTo(Math.cos(a) * rr, Math.sin(a) * rr);
+      }
+      ctx.closePath();
+      ctx.shadowColor = 'rgba(255,233,168,.75)';
+      ctx.shadowBlur = 12;
+      ctx.fillStyle = '#FFE9A8';
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function drawObstacle(ctx, o, ground) {
+      const y = ground - o.h;
+      if (o.type === 'milk') {
+        ctx.fillStyle = 'rgba(255,250,240,.9)';
+        ctx.beginPath(); ctx.ellipse(o.x + o.w / 2, ground - 4, o.w / 2, 8, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(42,42,36,.2)';
+        ctx.beginPath(); ctx.ellipse(o.x + o.w / 2, ground - 2, o.w / 2 - 6, 3, 0, 0, Math.PI * 2); ctx.fill();
+      } else if (o.type === 'cake') {
+        ctx.fillStyle = '#F3D9B8'; ctx.fillRect(o.x, y + 10, o.w, o.h - 10);
+        ctx.fillStyle = '#E86A6A'; ctx.fillRect(o.x + 4, y, o.w - 8, 12);
+        ctx.fillStyle = '#FFF9EC'; ctx.fillRect(o.x + 8, y - 4, o.w - 16, 6);
+      } else {
+        ctx.fillStyle = '#C98E5A'; ctx.fillRect(o.x + 8, y + 6, o.w - 16, o.h - 6);
+        ctx.fillStyle = '#A96F42'; ctx.fillRect(o.x, y + 9, 10, 10); ctx.fillRect(o.x + o.w - 10, y + 9, 10, 10);
+      }
+    }
+
+    function drawPrince(ctx, x, y, w, h) {
+      const cx = x + w / 2, cy = y + h / 2;
+      const sq = parkour.squash;
+      const sx = 1 + sq * 0.6;
+      const sy = 1 - sq * 0.6;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(sx, sy);
+      ctx.translate(-cx, -cy);
+      ctx.strokeStyle = '#3A2B24'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+      const t = performance.now() / 120;
+      ctx.beginPath(); ctx.moveTo(cx - 8, cy + 16); ctx.lineTo(cx - 12 + Math.sin(t) * 4, cy + 28); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + 8, cy + 16); ctx.lineTo(cx + 12 - Math.sin(t) * 4, cy + 28); ctx.stroke();
+      ctx.fillStyle = '#2E211C'; ctx.beginPath(); ctx.arc(cx, cy, 21, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#F6E7C8'; ctx.beginPath(); ctx.arc(cx, cy, 13, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#E8C64A';
+      ctx.beginPath();
+      ctx.moveTo(cx - 11, cy - 17); ctx.lineTo(cx - 6, cy - 28); ctx.lineTo(cx, cy - 18);
+      ctx.lineTo(cx + 6, cy - 28); ctx.lineTo(cx + 11, cy - 17); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#2E211C';
+      ctx.beginPath(); ctx.arc(cx - 4, cy - 2, 1.5, 0, Math.PI * 2); ctx.arc(cx + 4, cy - 2, 1.5, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+
+    function drawPrincess(ctx, x, y) {
+      ctx.fillStyle = 'rgba(255,220,220,.9)';
+      ctx.beginPath(); ctx.moveTo(x, y + 10); ctx.lineTo(x - 14, y + 34); ctx.lineTo(x + 14, y + 34); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#F6D9B8'; ctx.beginPath(); ctx.arc(x, y, 9, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#5A3B2E'; ctx.beginPath(); ctx.arc(x, y - 2, 10, Math.PI, 0); ctx.fill();
+      ctx.fillStyle = '#E8C64A';
+      ctx.beginPath();
+      ctx.moveTo(x - 7, y - 10); ctx.lineTo(x - 4, y - 18); ctx.lineTo(x, y - 11);
+      ctx.lineTo(x + 4, y - 18); ctx.lineTo(x + 7, y - 10); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle = 'rgba(255,220,220,.8)'; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(x + 12, y + 8); ctx.lineTo(x + 26, y - 4); ctx.stroke();
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (state.scene !== 'parkour' || !parkour.running || e.repeat) return;
+      if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); parkourJump(); }
+    });
+    document.addEventListener('keyup', (e) => {
+      if (state.scene !== 'parkour') return;
+      if (e.code === 'Space' || e.code === 'ArrowUp') parkourRelease();
+    });
+
+    const mountainPanel = $('#mountain-panel');
+
+    function renderMountain() {
+      if (!mountainPanel || mountainPanel.dataset.ready === '1') return;
+      mountainPanel.dataset.ready = '1';
+      mountainPanel.innerHTML = `
+        <div class="mountain-bg" style="background-image:linear-gradient(rgba(16,26,36,.42),rgba(244,236,221,.9)),url('${assets.photos.p06}')"></div>
+        <div class="mountain-content">
+          ${storyBanner('mountain')}
+          <div class="mountain-sheet">
+            <h2 class="scene-title">山 · 往后</h2>
+            <p class="scene-sub">${CONTENT.COPY.mountain.intro}</p>
+            <p class="wish-steps">① 写一句愿望　② 点「系上」</p>
+            <div class="wish-box" data-testid="wish-box">
+              <label class="visually-hidden" for="wish-input">写下愿望</label>
+              <input id="wish-input" data-testid="wish-input" maxlength="40" placeholder="${CONTENT.COPY.mountain.placeholder}" value="${escapeAttr(state.wish)}">
+              <button class="btn btn-fire" data-testid="wish-submit">${CONTENT.COPY.mountain.submit}</button>
+            </div>
+            <p class="wish-hint" data-testid="wish-hint">${CONTENT.COPY.mountain.hint}</p>
+            <p class="story-status" data-testid="story-status"></p>
+            <div class="ribbon-wrap" data-testid="ribbon-wrap">
+              <svg viewBox="0 120 600 110" aria-hidden="true">
+                <path class="ribbon-path" d="M40 200 C 160 150, 300 215, 560 165" fill="none" stroke="#B23B2E" stroke-width="7" stroke-linecap="round" stroke-dasharray="10 10"/>
+                <text class="ribbon-text" x="50%" y="196" text-anchor="middle">${escapeHtml(state.wish || CORE.DEFAULT_WISH)}</text>
+              </svg>
+            </div>
+            <p class="done-line hidden" data-testid="mountain-done">${CONTENT.COPY.mountain.done}</p>
+            <button class="btn btn-primary hidden" data-testid="to-cake">${CONTENT.COPY.mountain.next}</button>
+          </div>
+        </div>`;
+      $('[data-testid="wish-submit"]', mountainPanel).addEventListener('click', submitWish);
+      $('[data-testid="to-cake"]', mountainPanel).addEventListener('click', () => setScene('cake'));
+      restoreMountain();
+      setStoryStatus(state.wish ? '红丝带已经系上树梢。他还在等山风。' : '山风穿过树梢，满树的红丝带都在响。', mountainPanel);
+    }
+
+    function submitWish() {
+      const input = $('[data-testid="wish-input"]', mountainPanel);
+      const hint = $('[data-testid="wish-hint"]', mountainPanel);
+      const box = $('[data-testid="wish-box"]', mountainPanel);
+      // 空着就系上会让人以为没反应；先提醒一句，别真的跳过这一步
+      if (!input.value.trim() && !state.wish) {
+        hint.textContent = CONTENT.COPY.mountain.empty;
+        hint.classList.add('warn');
+        box.classList.remove('shake');
+        void box.offsetWidth;
+        box.classList.add('shake');
+        input.focus();
+        chime(340);
+        return;
+      }
+      setState(CORE.recordWish(state, input.value));
+      input.value = state.wish;
+      $('.ribbon-text', mountainPanel).textContent = state.wish;
+      $('.ribbon-wrap', mountainPanel).classList.add('fly');
+      setStoryStatus('红丝带飞上树梢。', mountainPanel);
+      hint.textContent = '';
+      hint.classList.remove('warn');
+      chime(640);
+      // 先看丝带飞，再给"山听见了"和去蛋糕店的按钮——两拍，别一起砸出来
+      setTimeout(() => {
+        $('[data-testid="mountain-done"]', mountainPanel).classList.remove('hidden');
+        $('[data-testid="to-cake"]', mountainPanel).classList.remove('hidden');
+        setStoryStatus('山风把丝带吹得直响。', mountainPanel);
+        scrollToNext(mountainPanel);
+      }, 900);
+    }
+
+    function restoreMountain() {
+      if (!state.wish) return;
+      const wrap = $('.ribbon-wrap', mountainPanel);
+      wrap.classList.add('fly');
+      $('[data-testid="mountain-done"]', mountainPanel).classList.remove('hidden');
+      $('[data-testid="to-cake"]', mountainPanel).classList.remove('hidden');
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+    function escapeAttr(text) { return escapeHtml(text); }
+
+    const cakePanel = $('#cake-panel');
+
+    function renderCake() {
+      if (!cakePanel || cakePanel.dataset.ready === '1') return;
+      cakePanel.dataset.ready = '1';
+      cakePanel.innerHTML = `
+        ${storyBanner('cake')}
+        <h2 class="scene-title">蛋糕店 · 记得</h2>
+        <p class="scene-sub">${CONTENT.COPY.cake.intro}</p>
+        <p class="story-status" data-testid="story-status"></p>
+        <div class="cake-shop">
+          <p class="cake-question" data-testid="cake-question">${state.allergySolved ? CONTENT.COPY.cake.qCake : CONTENT.COPY.cake.qAllergy}</p>
+          <div class="cake-options ${state.allergySolved ? 'hidden' : ''}" data-testid="allergen-options">
+            ${CONTENT.ALLERGENS.map((a) => `<button class="cake-choice" data-testid="allergen-${a.id}" data-allergen="${a.id}">${a.label}</button>`).join('')}
+          </div>
+          <div class="cake-row ${state.allergySolved ? '' : 'hidden'}" data-testid="cake-row">
+            ${CONTENT.CAKES.map((c) => `
+              <button class="cake-card ${c.allergen ? 'allergen' : ''}" data-testid="cake-${c.id}" data-cake="${c.id}">
+                <span class="cake-slice"></span>
+                <span class="cake-name">${c.label}</span>
+                ${c.allergen ? '<span class="cake-warn" aria-hidden="true">×</span>' : ''}
+              </button>`).join('')}
+          </div>
+          <p class="cake-feedback" data-testid="cake-feedback" aria-live="polite"></p>
+          <div class="cake-done ${state.cakeChosen ? '' : 'hidden'}" data-testid="cake-done">
+            <p class="cake-line" data-testid="cake-line">${CONTENT.COPY.cake.line}</p>
+            <div class="cake-memory" data-testid="cake-memory">
+              <p class="cake-memory-label">${escapeHtml(CONTENT.COPY.cake.memoryLabel)}</p>
+              ${CONTENT.COPY.cake.memoryLines.map((l) => `<p>${escapeHtml(l)}</p>`).join('')}
+            </div>
+            <p class="cake-teaser" data-testid="cake-teaser">${escapeHtml(CONTENT.COPY.cake.teaser)}</p>
+            <p class="cake-carry" data-testid="cake-carry">${escapeHtml(CONTENT.COPY.cake.carry)}</p>
+            <button class="btn btn-primary" data-testid="cake-next">${CONTENT.COPY.cake.next}</button>
+          </div>
+        </div>`;
+      cakePanel.onclick = onCakeClick;
+      syncCake();
+      if (state.cakeChosen) setStoryStatus('他选了榴莲千层，抱在怀里。', cakePanel);
+      else if (state.allergySolved) setStoryStatus('他记得：芒果不行。', cakePanel);
+      else setStoryStatus('他站在柜台前，手心有点出汗。', cakePanel);
+    }
+
+    function onCakeClick(e) {
+      const allergenBtn = e.target.closest('[data-allergen]');
+      if (allergenBtn && !state.allergySolved) {
+        if (allergenBtn.dataset.allergen === 'mango') {
+          setState(CORE.recordAllergy(state));
+          $('[data-testid="cake-feedback"]', cakePanel).textContent = CONTENT.COPY.cake.okAllergy;
+          setStoryStatus('他记得：芒果不行。', cakePanel);
+          chime(660);
+          syncCake();
+        } else {
+          $('[data-testid="cake-feedback"]', cakePanel).textContent = CONTENT.COPY.cake.wrongAllergy;
+          chime(320);
+        }
+        return;
+      }
+      const cakeBtn = e.target.closest('[data-cake]');
+      if (cakeBtn && state.allergySolved && !state.cakeChosen) {
+        if (cakeBtn.dataset.cake === 'durian') {
+          setState(CORE.recordCake(state, 'durian', CONTENT.CAKES.map((c) => c.id)));
+          $('[data-testid="cake-feedback"]', cakePanel).textContent = CONTENT.COPY.cake.okCake;
+          setStoryStatus('他选了榴莲千层，抱在怀里。', cakePanel);
+          chime(700);
+          syncCake();
+          scrollToNext(cakePanel);
+        } else {
+          $('[data-testid="cake-feedback"]', cakePanel).textContent = cakeBtn.dataset.cake === 'mango'
+            ? '芒果不行。他记得你碰它会过敏。'
+            : CONTENT.COPY.cake.wrongCake;
+          chime(320);
+        }
+      }
+    }
+
+    function syncCake() {
+      const q = $('[data-testid="cake-question"]', cakePanel);
+      const options = $('[data-testid="allergen-options"]', cakePanel);
+      const row = $('[data-testid="cake-row"]', cakePanel);
+      const done = $('[data-testid="cake-done"]', cakePanel);
+      if (state.allergySolved) {
+        q.textContent = CONTENT.COPY.cake.qCake;
+        options.classList.add('hidden');
+        row.classList.remove('hidden');
+      } else {
+        q.textContent = CONTENT.COPY.cake.qAllergy;
+        options.classList.remove('hidden');
+        row.classList.add('hidden');
+      }
+      done.classList.toggle('hidden', !state.cakeChosen);
+      if (state.cakeChosen) {
+        q.classList.add('hidden');
+        row.classList.add('hidden');
+        $('[data-testid="cake-feedback"]', cakePanel).classList.add('hidden');
+        const next = $('[data-testid="cake-next"]', cakePanel);
+        if (!next.dataset.bound) {
+          next.dataset.bound = '1';
+          next.addEventListener('click', () => setScene('letter'));
+        }
+      }
+    }
+
+    const letterPanel = $('#letter-panel');
+
+    function renderLetter() {
+      if (!letterPanel || letterPanel.dataset.ready === '1') return;
+      letterPanel.dataset.ready = '1';
+      letterPanel.innerHTML = `
+        ${storyBanner('letter')}
+        <p class="story-status" data-testid="story-status">雾收走的东西，都在这一页上了。</p>
+        <div class="letter-paper">
+          <p class="letter-to">致米宝</p>
+          <div data-testid="letter-sections">
+            ${CONTENT.LETTER.map((sec, i) => `
+              <section class="letter-section ${i < state.letterRevealed ? 'show' : ''}" data-letter="${i}" data-testid="letter-section-${i}">
+                <h3>【${sec.key}】</h3>
+                <p class="letter-note">${CONTENT.COPY.memoryNotes[i]}</p>
+                ${sec.paragraphs.map((p) => `<p>${escapeHtml(p)}</p>`).join('')}
+              </section>`).join('')}
+          </div>
+          <div class="letter-signature ${state.letterRevealed >= 3 ? 'show' : ''}" data-testid="letter-signature">
+            <p>${CONTENT.SIGNATURE[0]}</p><p>${CONTENT.SIGNATURE[1]}</p>
+          </div>
+          <div class="next-row">
+            <button class="btn btn-fire" data-testid="letter-next">${state.letterRevealed === 0 ? CONTENT.COPY.letter.open : CONTENT.COPY.letter.next}</button>
+            <button class="btn" data-testid="letter-all">${CONTENT.COPY.letter.all}</button>
+            <button class="btn btn-primary hidden" data-testid="letter-close">${CONTENT.COPY.letter.close}</button>
+          </div>
+        </div>`;
+      bindLetter();
+      syncLetter();
+    }
+
+    function bindLetter() {
+      $('[data-testid="letter-next"]', letterPanel).addEventListener('click', () => {
+        setState(CORE.revealLetter(state, CONTENT.LETTER.length));
+        syncLetter();
+        chime(600);
+      });
+      $('[data-testid="letter-all"]', letterPanel).addEventListener('click', () => {
+        const s = CORE.clone(state);
+        s.letterRevealed = CONTENT.LETTER.length;
+        setState(s);
+        syncLetter();
+      });
+      $('[data-testid="letter-close"]', letterPanel).addEventListener('click', () => setScene('finale'));
+    }
+
+    function syncLetter() {
+      $$('.letter-section', letterPanel).forEach((sec, i) => sec.classList.toggle('show', i < state.letterRevealed));
+      const sig = $('[data-testid="letter-signature"]', letterPanel);
+      sig.classList.toggle('show', state.letterRevealed >= 3);
+      const open = $('[data-testid="letter-next"]', letterPanel);
+      open.textContent = state.letterRevealed === 0 ? CONTENT.COPY.letter.open : CONTENT.COPY.letter.next;
+      open.classList.toggle('hidden', state.letterRevealed >= 3);
+      $('[data-testid="letter-all"]', letterPanel).classList.toggle('hidden', state.letterRevealed >= 3);
+      $('[data-testid="letter-close"]', letterPanel).classList.toggle('hidden', state.letterRevealed < 3);
+    }
+
+    const finalePanel = $('#finale-panel');
+    let candleTimer = null;
+
+    function renderFinale() {
+      if (!finalePanel || finalePanel.dataset.ready === '1') return;
+      finalePanel.dataset.ready = '1';
+      const heart = photoById('p17');
+      finalePanel.innerHTML = `
+        ${storyBanner('finale')}
+        <p class="story-status" data-testid="story-status">蜡烛还亮着。就等你了。</p>
+        <div class="finale-head">
+          <p class="wish-echo ${state.wish ? '' : 'hidden'}" data-testid="wish-echo">${escapeHtml(state.wish)}</p>
+          <h2 class="scene-title">把我们的光，留在这里</h2>
+        </div>
+        <div class="gallery" data-testid="gallery">
+          ${CONTENT.PHOTOS.map((p) => `
+            <button class="gallery-item" data-testid="photo-${p.id}" data-photo="${p.id}">
+              <img src="${assets.photos[p.id]}" alt="${p.caption}" loading="lazy">
+              <span>${p.caption}</span>
+            </button>`).join('')}
+        </div>
+        <div class="cake-zone">
+          <button class="cake" data-testid="candle" aria-label="长按吹灭蜡烛">
+            <span class="cake-plate"></span>
+            <span class="cake-body"></span>
+            <span class="candle-stick"><span class="candle-flame"></span></span>
+          </button>
+          <p class="candle-hint" data-testid="candle-hint">${CONTENT.COPY.finale.candleHint}</p>
+          <figure class="heart-photo hidden" data-testid="heart-photo" data-reveal="0">
+            <img src="${assets.photos[heart.id]}" alt="${heart.caption}">
+            <figcaption>${heart.caption}</figcaption>
+          </figure>
+          <div class="finale-big hidden" data-testid="finale-big">
+            <p class="big-line">${CONTENT.COPY.finale.big}</p>
+            <p class="small-line">${CONTENT.COPY.finale.small}</p>
+            <p class="gift-line" data-testid="gift-line">${CONTENT.COPY.finale.gift}</p>
+            <div class="next-row">
+              <button class="btn" data-testid="reread">${CONTENT.COPY.finale.reread}</button>
+              <button class="btn" data-testid="restart">${CONTENT.COPY.finale.restart}</button>
+            </div>
+          </div>
+        </div>
+        <div class="lightbox hidden" data-testid="lightbox" role="dialog" aria-modal="true" aria-label="查看照片">
+          <button class="lightbox-close" data-testid="lightbox-close" aria-label="关闭">×</button>
+          <img data-testid="lightbox-img" alt="">
+        </div>`;
+      bindFinale();
+      if (state.completed) {
+        markCandleOut();
+        revealHeart(false);
+      }
+    }
+
+    function bindFinale() {
+      $('[data-testid="gallery"]', finalePanel).addEventListener('click', (e) => {
+        const item = e.target.closest('.gallery-item');
+        if (!item) return;
+        const lightbox = $('[data-testid="lightbox"]', finalePanel);
+        $('[data-testid="lightbox-img"]', finalePanel).src = assets.photos[item.dataset.photo];
+        $('[data-testid="lightbox-img"]', finalePanel).alt = photoById(item.dataset.photo).caption;
+        lightbox.classList.remove('hidden');
+      });
+      $('[data-testid="lightbox-close"]', finalePanel).addEventListener('click', closeLightbox);
+      $('[data-testid="lightbox"]', finalePanel).addEventListener('click', (e) => { if (e.target === e.currentTarget) closeLightbox(); });
+      if (!window.__muhooEscBound) {
+        window.__muhooEscBound = true;
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+      }
+
+      const candle = $('[data-testid="candle"]', finalePanel);
+      const start = () => {
+        if (state.completed || candleTimer) return;
+        candle.classList.add('blowing');
+        candleTimer = setTimeout(() => { candleTimer = null; blowCandle(); }, 1000);
+      };
+      const end = () => { if (candleTimer) { clearTimeout(candleTimer); candleTimer = null; candle.classList.remove('blowing'); } };
+      candle.addEventListener('pointerdown', (e) => { e.preventDefault(); start(); });
+      candle.addEventListener('pointerup', end);
+      candle.addEventListener('pointerleave', end);
+      candle.addEventListener('keydown', (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); start(); } });
+      candle.addEventListener('keyup', (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); end(); } });
+
+      $('[data-testid="reread"]', finalePanel).addEventListener('click', () => setScene('letter'));
+      $('[data-testid="restart"]', finalePanel).addEventListener('click', () => {
+        try { localStorage.removeItem(KEY); } catch {}
+        location.reload();
+      });
+    }
+
+    function closeLightbox() {
+      const lb = $('[data-testid="lightbox"]', finalePanel);
+      if (lb) lb.classList.add('hidden');
+    }
+
+    function markCandleOut() {
+      finalePanel.classList.add('candle-out');
+      const label = $('.story-label', finalePanel);
+      if (label) label.textContent = '尾声 · 灯灭了';
+      const body = $('.story-text', finalePanel);
+      if (body) body.textContent = '灯灭了。她就在那里。';
+      setStoryStatus('蜡烛灭了。蛋糕还热着。', finalePanel);
+    }
+
+    function blowCandle() {
+      setState(CORE.markComplete(state));
+      markCandleOut();
+      chime(420);
+      revealHeart(true);
+      // 照片一出现就把视线带过去：照片顶到离顶部 76px，下面三行字正好也在屏内
+      scrollToEl($('[data-testid="heart-photo"]', finalePanel), 700);
+    }
+
+    function revealHeart(animate) {
+      const heart = $('[data-testid="heart-photo"]', finalePanel);
+      const big = $('[data-testid="finale-big"]', finalePanel);
+      heart.classList.remove('hidden');
+      heart.dataset.reveal = '1';
+      setTimeout(() => {
+        big.classList.remove('hidden');
+        $('[data-testid="candle-hint"]', finalePanel).classList.add('hidden');
+        // 三行字出现后页才够长，这时再对一次位置：照片顶到 76px，字也能一起进屏
+        if (animate) scrollToEl(heart, 0);
+      }, animate ? 3000 : 0);
+    }
+
+    let startArmed = false;
+    let startArmTimer = null;
+    bindCover();
+    makeFireflies();
+    $('[data-testid="start"]').addEventListener('click', () => {
+      const startBtn = $('[data-testid="start"]');
+      // 有存档时先要一次确认（自定义的二次点击，不用系统弹窗）
+      if (hadSave && !startArmed) {
+        startArmed = true;
+        startBtn.textContent = CONTENT.COPY.cover.startConfirm;
+        startBtn.classList.add('btn-fire');
+        startArmTimer = setTimeout(() => {
+          startArmed = false;
+          startArmTimer = null;
+          startBtn.textContent = CONTENT.COPY.cover.start;
+          startBtn.classList.remove('btn-fire');
+        }, 4000);
+        return;
+      }
+      if (startArmTimer) { clearTimeout(startArmTimer); startArmTimer = null; }
+      startArmed = false;
+      hadSave = false;
+      startBtn.textContent = CONTENT.COPY.cover.start;
+      startBtn.classList.remove('btn-fire');
+      // 重开时保留音乐开关，避免按钮说「开」而背景音乐已经停了
+      const keepAudio = state.audioOn;
+      state = CORE.createState();
+      state.audioOn = keepAudio;
+      save();
+      resetPanels();
+      setScene('wood');
+    });
+    $('[data-testid="resume"]').addEventListener('click', () => {
+      // 已看完尾声时按钮写的是「再看一遍 · 尾声」，就真的把她送到尾声
+      setScene(state.completed ? 'finale' : state.scene);
+    });
+    $('[data-testid="back"]').addEventListener('click', () => {
+      const idx = CORE.SCENES.indexOf(state.scene);
+      if (idx > 1) setScene(CORE.SCENES[idx - 1]);
+    });
+    $('[data-testid="replay"]').addEventListener('click', replayLevel);
+    $('[data-testid="audio-toggle"]').addEventListener('click', toggleAudio);
+    // 木幕的"往下滑"提示跟着滚动重新判断：滑下去自然收起，滚回上面又会露出来
+    window.addEventListener('scroll', updateWoodMore, { passive: true });
+    window.addEventListener('resize', updateWoodMore);
+    document.addEventListener('visibilitychange', () => {
+      if (!bgAudio) return;
+      if (document.hidden && state.audioOn) bgAudio.pause();
+      if (!document.hidden && state.audioOn) bgAudio.play().catch(() => {});
+    });
+
+    // 调试接口只在地址栏带 #debug 时挂出；直接双击打开成品时不存在，
+    // 免得她误按 F12 或改存档把眼睛提前看光。
+    if (location.hash.indexOf('debug') !== -1) {
+      window.__MUHUO__ = {
+        getState: () => CORE.clone(state),
+        setState: (next) => { const keep = state.audioOn; state = next; state.audioOn = keep; save(); sync(); },
+        goTo: (scene) => setScene(scene),
+        parkourRescue: () => triggerRescue(),
+        parkourWin: () => finishParkour(true)
+      };
+    }
+    sync();
+  })();
+  </script>
+</body>
+</html>
