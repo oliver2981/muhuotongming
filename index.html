@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- 木火通明 · v1.1 · build 2026-11-11 20:00 · 外链版（照片与音频分离） -->
+<!-- 木火通明 · v1.1 · build 2026-11-11 20:13 · 外链版（照片与音频分离） -->
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -617,14 +617,13 @@
     { id: 'p07', file: 'photos/mmexport1774150622797.jpg', scene: 'fire', caption: '你眨一下眼，我这边就亮了。' },
     { id: 'p08', file: 'photos/1794406550821.jpg', scene: 'fire', caption: '你拿起麦克风，我就自动变成观众。' },
     { id: 'p09', file: 'photos/mmexport1776658076339.jpg', scene: 'gallery', caption: '蓝色灯光里，你比霓虹好看。' },
-    { id: 'p10', file: 'photos/mmexport1776012924457.jpg', scene: 'fire', caption: '人间烟火里，你回头找我的样子。' },
-    { id: 'p11', file: 'photos/1794406550862.jpg', scene: 'gallery', caption: '花会谢，但那晚的河风记得。' },
+    { id: 'p10', file: 'photos/mmexport1776012924457.jpg', scene: 'fire', caption: '人间烟火里，你回头找我的样子。' },    { id: 'p11', file: 'photos/1794406550862.jpg', scene: 'gallery', caption: '花会谢，但那晚的河风记得。' },
     { id: 'p12', file: 'photos/mmexport1779333685784.jpg', scene: 'gallery', caption: '花在桌上，你在我眼里——这句有点土，但是真的。' },
     { id: 'p13', file: 'photos/mmexport1780981738473.jpg', scene: 'gallery', caption: '地铁会到站，我想一直坐在这趟车上。' },
     { id: 'p14', file: 'photos/mmexport1783914057835.jpg', scene: 'wood', caption: '游乐园的镜子里，我们俩和身后的灯一起入画。' },
     { id: 'p15', file: 'photos/1794407747125(1).jpg', scene: 'gallery', caption: '你穿红，我穿白，连手势都要凑成一对。' },
     { id: 'p16', file: 'photos/mmexport1783914081986.jpg', scene: 'gallery', caption: '阳光很好，你很好，我偷偷从你身后探出头。' },
-    { id: 'p17', file: 'photos/bixin.jpg', scene: 'finale', caption: '两只手拼成的心，刚好装下我们。' }
+    { id: 'p17', file: 'photos/bixin.jpg', scene: 'finale', wall: false, caption: '两只手拼成的心，刚好装下我们。' }
   ];
 
   const PAIRS = [
@@ -636,7 +635,7 @@
 
   const LANTERNS = [
     { photoId: 'p07', line: '你眨一下眼，我这边就亮了。' },
-    { photoId: 'p08', line: '你拿起麦克风，我就自动变成观众。' },
+    { photoId: 'p09', line: '灯亮起来的那一刻，我先看见你的眼睛。' },
     { photoId: 'p10', line: '人间烟火里，你回头找我的样子。' }
   ];
 
@@ -2182,7 +2181,7 @@
           <h2 class="scene-title">把我们的光，留在这里</h2>
         </div>
         <div class="gallery" data-testid="gallery">
-          ${CONTENT.PHOTOS.map((p) => `
+          ${CONTENT.PHOTOS.filter((p) => p.wall !== false).map((p) => `
             <button class="gallery-item" data-testid="photo-${p.id}" data-photo="${p.id}">
               <img src="${assets.photos[p.id]}" alt="${p.caption}" loading="lazy">
               <span>${p.caption}</span>
