@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- 木火通明 · v1.1 · build 2026-11-12 04:56 · 外链版（照片与音频分离） -->
+<!-- 木火通明 · v1.1 · build 2026-11-12 05:15 · 外链版（照片与音频分离） -->
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -384,6 +384,13 @@
       font-family: var(--serif); font-size: 16px; line-height: 1.7; text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,.3);
     }
+    .parkour-rescue.ask {
+      bottom: 26px; width: min(360px, 84%);
+      font-size: 21px; letter-spacing: .14em; padding: 16px 20px 10px;
+      animation: resumeBreath 1.8s ease-in-out infinite;
+    }
+    .parkour-rescue.ask::after { content: '点屏幕继续'; display: block; margin-top: 6px; font-size: 12px; letter-spacing: .18em; color: rgba(139,73,74,.7); }
+    @keyframes resumeBreath { 0%, 100% { opacity: .86; } 50% { opacity: 1; } }
     .parkour-score { font-family: var(--serif); font-size: 14px; color: rgba(247,238,220,.65); margin: 0 0 8px; letter-spacing: .1em; }
     [data-scene="parkour"] .done-line { color: #F7EEDC; }
     [data-scene="mountain"] { position: relative; overflow: hidden; }
@@ -741,8 +748,9 @@
     },
     parkour: {
       title: '云端跑酷',
-      hint: '点一下跳，按住跳更高。掉下去也没关系，大米公主在云上。',
+      hint: '点一下跳，按住跳更高。掉下去大米公主会把你捞回来，点一下接着跑。',
       rescue: '奥利奥王子脚下一滑，掉了下去。云缝里伸出一只手——大米公主的魔法把他捞了回来。',
+      resume: '点一下，接着跑',
       done: '云端尽头到了。她一直在看着你。',
       next: '上山'
     },
@@ -1616,10 +1624,10 @@
     const parkour = {
       canvas: null, ctx: null, raf: null, running: false, last: 0,
       princeX: 150, princeY: 206, vy: 0, w: 44, h: 44, groundY: 250,
-      speed: 4.1, distance: 0, target: 3800, obstacles: [], spawnAt: 700,
+      speed: 4.1, distance: 0, target: 5100, obstacles: [], spawnAt: 700,
       coyote: 0, jumpBuffer: 0, jumpHeld: false, squash: 0,
       stars: [], starsGot: 0, starSpawnAt: 900, starsSpawned: 0,
-      rescuing: false, rescueFrames: 0, invincible: 0, done: false
+      rescuing: false, rescueFrames: 0, waiting: false, invincible: 0, done: false
     };
 
     function renderParkour() {
@@ -1644,11 +1652,12 @@
       const canvas = $('[data-testid="parkour-canvas"]', parkourPanel);
       parkour.canvas = canvas;
       parkour.ctx = canvas.getContext('2d');
-      canvas.addEventListener('pointerdown', (e) => { e.preventDefault(); parkourJump(); });
+      canvas.addEventListener('pointerdown', (e) => { e.preventDefault(); if (parkour.waiting) resumeParkour(); else parkourJump(); });
       canvas.addEventListener('pointerup', parkourRelease);
       canvas.addEventListener('pointercancel', parkourRelease);
       canvas.addEventListener('pointerleave', parkourRelease);
       parkour.done = state.parkourDone;
+      parkourPanel.addEventListener('pointerdown', () => { if (parkour.waiting) resumeParkour(); });
       resetParkour();
       if (state.parkourDone) finishParkour(false);
       else setStoryStatus('他抱着蛋糕，跑上云端长廊。', parkourPanel);
@@ -1663,6 +1672,7 @@
       parkour.spawnAt = 700;
       parkour.rescuing = false;
       parkour.rescueFrames = 0;
+      parkour.waiting = false;
       parkour.invincible = 0;
       parkour.done = false;
       parkour.coyote = 0;
@@ -1715,15 +1725,16 @@
 
     function updateParkour(dt = 1) {
       if (parkour.done) return;
+      // 被捞上来之后画面停住，等她点一下再继续（不再自己往前跑，给她一口气）
+      if (parkour.waiting) return;
       if (parkour.rescuing) {
         parkour.rescueFrames -= dt;
         if (parkour.rescueFrames <= 0) {
           parkour.rescuing = false;
+          parkour.waiting = true;
           parkour.princeY = parkour.groundY - parkour.h;
           parkour.vy = 0;
-          parkour.invincible = 90;
-          parkour.obstacles = parkour.obstacles.filter((o) => o.x > 360);
-          hideRescue();
+          showResume();
         }
         return;
       }
@@ -1789,7 +1800,7 @@
     }
 
     function parkourJump() {
-      if (!parkour.running || parkour.done || parkour.rescuing) return;
+      if (!parkour.running || parkour.done || parkour.rescuing || parkour.waiting) return;
       parkour.jumpHeld = true;
       if (onParkourGround() || parkour.coyote > 0) doParkourJump();
       else parkour.jumpBuffer = 8;
@@ -1800,14 +1811,37 @@
     }
 
     function triggerRescue() {
-      if (parkour.rescuing || parkour.done) return;
+      if (parkour.rescuing || parkour.waiting || parkour.done) return;
       parkour.rescuing = true;
       parkour.rescueFrames = 90;
       parkour.vy = 0;
       const el = $('[data-testid="parkour-rescue"]', parkourPanel);
-      if (el) el.classList.remove('hidden');
-      setStoryStatus('大米公主把他捞了回来。他拍拍身上的云，继续跑。', parkourPanel);
+      if (el) { el.classList.remove('hidden', 'ask'); el.textContent = CONTENT.COPY.parkour.rescue; }
+      setStoryStatus('大米公主把他捞了回来。', parkourPanel);
       chime(520);
+    }
+
+    // 魔法演完：把"点一下继续"摆到画面上，人停住
+    function showResume() {
+      const el = $('[data-testid="parkour-rescue"]', parkourPanel);
+      if (el) {
+        el.classList.remove('hidden');
+        el.classList.add('ask');
+        el.textContent = CONTENT.COPY.parkour.resume;
+      }
+      setStoryStatus('大米公主把他放回云上。', parkourPanel);
+    }
+
+    function resumeParkour() {
+      if (!parkour.waiting) return;
+      parkour.waiting = false;
+      parkour.princeY = parkour.groundY - parkour.h;
+      parkour.vy = 0;
+      parkour.invincible = 120;
+      parkour.obstacles = parkour.obstacles.filter((o) => o.x > 380);
+      hideRescue();
+      setStoryStatus('他拍拍身上的云，接着跑。', parkourPanel);
+      chime(660);
     }
 
     function hideRescue() {
@@ -1826,6 +1860,7 @@
       parkour.done = true;
       parkour.running = false;
       parkour.rescuing = false;
+      parkour.waiting = false;
       parkour.rescueFrames = 0;
       if (parkour.raf) { cancelAnimationFrame(parkour.raf); parkour.raf = null; }
       hideRescue();
@@ -1987,7 +2022,7 @@
 
     document.addEventListener('keydown', (e) => {
       if (state.scene !== 'parkour' || !parkour.running || e.repeat) return;
-      if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); parkourJump(); }
+      if (e.code === 'Space' || e.code === 'ArrowUp') { e.preventDefault(); if (parkour.waiting) resumeParkour(); else parkourJump(); }
     });
     document.addEventListener('keyup', (e) => {
       if (state.scene !== 'parkour') return;
@@ -2423,6 +2458,7 @@
         setState: (next) => { const keep = state.audioOn; state = next; state.audioOn = keep; save(); sync(); },
         goTo: (scene) => setScene(scene),
         parkourRescue: () => triggerRescue(),
+        getParkour: () => ({ distance: parkour.distance, target: parkour.target, waiting: parkour.waiting, rescuing: parkour.rescuing, done: parkour.done, starsGot: parkour.starsGot }),
         parkourWin: () => finishParkour(true)
       };
     }
