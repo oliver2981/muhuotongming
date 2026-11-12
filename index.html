@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- 木火通明 · v1.1 · build 2026-11-12 05:32 · 外链版（照片与音频分离） -->
+<!-- 木火通明 · v1.1 · build 2026-11-12 05:45 · 外链版（照片与音频分离） -->
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -1648,7 +1648,7 @@
       speed: 4.1, distance: 0, target: 5100, obstacles: [], spawnAt: 700,
       coyote: 0, jumpBuffer: 0, jumpHeld: false, squash: 0,
       stars: [], starsGot: 0, starSpawnAt: 900, starsSpawned: 0,
-      rescuing: false, rescueFrames: 0, waiting: false, invincible: 0, done: false
+      rescuing: false, rescueFrames: 0, waiting: false, magicFade: 0, invincible: 0, done: false
     };
 
     function renderParkour() {
@@ -1699,6 +1699,7 @@
       parkour.spawnAt = 700;
       parkour.rescuing = false;
       parkour.rescueFrames = 0;
+      parkour.magicFade = 0;
       parkour.waiting = false;
       parkour.invincible = 0;
       parkour.done = false;
@@ -1752,6 +1753,10 @@
 
     function updateParkour(dt = 1) {
       if (parkour.done) return;
+      // 恢复之后那束魔法光淡出（约 0.4 秒），而不是"一点就没了"
+      if (!parkour.rescuing && !parkour.waiting && parkour.magicFade > 0) {
+        parkour.magicFade = Math.max(0, parkour.magicFade - dt / 26);
+      }
       // 被捞上来之后画面停住，等她点一下再继续（不再自己往前跑，给她一口气）
       if (parkour.waiting) return;
       if (parkour.rescuing) {
@@ -1872,6 +1877,7 @@
       parkour.waiting = false;
       parkour.princeY = parkour.groundY - parkour.h;
       parkour.vy = 0;
+      parkour.magicFade = 1; // 先满亮，再淡出
       parkour.invincible = 120;
       parkour.obstacles = parkour.obstacles.filter((o) => o.x > 380);
       hideRescue();
@@ -1906,6 +1912,7 @@
       parkour.rescuing = false;
       parkour.waiting = false;
       parkour.rescueFrames = 0;
+      parkour.magicFade = 0;
       if (parkour.raf) { cancelAnimationFrame(parkour.raf); parkour.raf = null; }
       hideRescue();
       drawParkour();
@@ -1976,21 +1983,28 @@
       for (const o of parkour.obstacles) drawObstacle(ctx, o, ground);
       for (const s of parkour.stars) drawStar(ctx, s.x, s.y, 12);
       drawPrincess(ctx, 450, 46);
-      if (parkour.rescuing) {
-        ctx.strokeStyle = 'rgba(255,170,170,.85)';
+      const lift = parkour.rescuing ? 50 : (parkour.waiting ? 26 : 26 * parkour.magicFade);
+      const magicOn = parkour.rescuing || parkour.waiting || parkour.magicFade > 0;
+      if (magicOn) {
+        // 停住时这束光继续亮着（轻微呼吸），点"继续"之后才淡出，别让"手"在台词出现时就没
+        const breathe = 0.8 + 0.2 * Math.sin(performance.now() / 380);
+        const alpha = parkour.rescuing ? 1 : (parkour.waiting ? breathe : parkour.magicFade);
+        const tipX = parkour.princeX + 22;
+        const tipY = parkour.princeY - 20 - lift;
+        ctx.strokeStyle = `rgba(255,170,170,${(0.85 * alpha).toFixed(3)})`;
         ctx.lineWidth = 4;
         ctx.beginPath();
         ctx.moveTo(450, 80);
-        ctx.quadraticCurveTo(300, 160, parkour.princeX + 22, parkour.princeY - 20);
+        ctx.quadraticCurveTo(300, 160, tipX, tipY);
         ctx.stroke();
-        ctx.fillStyle = 'rgba(255,220,220,.25)';
-        ctx.beginPath(); ctx.arc(parkour.princeX + 22, parkour.princeY - 20, 40, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = `rgba(255,220,220,${(0.25 * alpha).toFixed(3)})`;
+        ctx.beginPath(); ctx.arc(tipX, tipY, 40 + 8 * (alpha - 0.8), 0, Math.PI * 2); ctx.fill();
       }
       const air = Math.max(0, (ground - parkour.h) - parkour.princeY);
       const shadowW = Math.max(12, 26 - air / 10);
       ctx.fillStyle = `rgba(42,42,36,${Math.max(.08, .24 - air / 600)})`;
       ctx.beginPath(); ctx.ellipse(parkour.princeX + parkour.w / 2, ground - 2, shadowW, 6, 0, 0, Math.PI * 2); ctx.fill();
-      drawPrince(ctx, parkour.princeX, parkour.rescuing ? parkour.princeY - 50 : parkour.princeY, parkour.w, parkour.h);
+      drawPrince(ctx, parkour.princeX, parkour.princeY - lift, parkour.w, parkour.h);
     }
 
     function drawStar(ctx, x, y, r) {
