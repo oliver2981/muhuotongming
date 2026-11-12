@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- 木火通明 · v1.1 · build 2026-11-12 04:30 · 外链版（照片与音频分离） -->
+<!-- 木火通明 · v1.1 · build 2026-11-12 04:56 · 外链版（照片与音频分离） -->
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8">
@@ -519,6 +519,14 @@
       letter-spacing: .06em; color: rgba(42,42,36,.55);
       padding-top: 16px; border-top: 1px solid rgba(200,162,74,.3);
     }
+    .reality-note {
+      margin: 14px auto 0; max-width: 480px; font-family: var(--serif); font-size: 15px; line-height: 2;
+      letter-spacing: .05em; color: rgba(42,42,36,.78); text-align: left;
+      padding: 12px 18px; border-radius: 10px; background: rgba(251,246,234,.72);
+      border: 1px dashed rgba(139,73,74,.26);
+    }
+    .reality-note p { margin: 0 0 8px; }
+    .reality-note p:last-child { margin-bottom: 0; }
     .lightbox { position: fixed; inset: 0; z-index: 40; background: rgba(16,26,36,.86); display: grid; place-items: center; padding: 40px; }
     .lightbox img { max-width: min(1000px, 92vw); max-height: 82vh; border-radius: 8px; box-shadow: 0 30px 80px rgba(0,0,0,.45); }
     .lightbox-close { position: absolute; top: 20px; right: 24px; border: 0; background: transparent; color: #FFFDF6; font-size: 34px; line-height: 1; }
@@ -692,7 +700,7 @@
       paragraphs: [
         '你五行缺木与火。那今天，我就把春天和炉火都采来给你。',
         '你做木，去生长，去做你想做的自己；你做火，去热烈，去照亮你想照亮的地方。我做大地——你飞得高，我在地上为你鼓掌；你飞累了想下来，我刚好接住你。',
-        '我一直觉得，恋爱不该是让你更有压力的战场，而该是你累极了能靠一靠的沙发。',
+        '我一直觉得，恋爱不该是让你更有压力的战场，而该是你累极了能靠一靠的沙发。外面那些风风雨雨、不想应付的人和事，你都不用管，有我挡在前面。',
         '山高水长，来日方长。命运把我们的路交织在一起，我便这样义无反顾地牵着你的手，慢慢走，也一直走下去。',
         '生日快乐，我的米宝。',
         '愿岁岁常相见，年年共此时。'
@@ -700,7 +708,7 @@
     }
   ];
 
-  const SIGNATURE = ['你的奥利奥', '2026 年 11 月 14 日'];
+  const SIGNATURE = ['你的奥利奥', '2026 年 11 月'];
 
   const COPY = {
     cover: {
@@ -748,7 +756,7 @@
       next: '前往蛋糕店'
     },
     story: {
-      cover: { label: '序章 · 饼干王国', text: '饼干王国的奥利奥王子，只记得今天要去给大米公主米宝过生日。雾把他记得的一切收走了——她的样子、她说的话，都成了空白。兜里只剩一张羊皮纸，写着：十一月十四，米宝生日。纸背还有一行小字：赴宴要带四样——春天、灯、药、一块甜。雾只收走甜的，收不走疼的。' },
+      cover: { label: '序章 · 饼干王国', text: '饼干王国的奥利奥王子，只记得今天要去给大米公主米宝过生日。雾把他记得的一切收走了——她的样子、她说的话，都成了空白。兜里只剩一张羊皮纸，写着：十一月十四，米宝生日。纸背还有一行小字：赴宴要带四样——春天、灯、药、一块甜。' },
       wood: { label: '第一幕 · 回忆森林', text: '第一幕，回忆森林。雾把去山那边的路封了，它只认她认得的东西。照片是雾唯一没收走的，湿漉漉地铺在落叶上，像谁翻乱的一叠旧信。他把照片和她的话对上，路才裂开一条缝。' },
       fire: { label: '第一幕 · 夜市灯海', text: '第一幕还没走完。夜市是去山那边的渡口——渡口的船，只在灯亮的时候开。三盏都亮起来，船才认他。' },
       herbs: { label: '第二幕 · 药圃', text: '第二幕，药圃。他想不起她最近过得怎样，只记得她总睡不实——所以船一靠岸，他先来这儿，替她配一包安神的药。方子缺三味：木、火、心。缺一样，云路就不载他。' },
@@ -809,6 +817,10 @@
       big: '生日快乐，米宝。',
       small: '愿往后的每一年，都有今晚这样的灯。',
       gift: '这一份提前两天送到；剩下的，等见面那天我亲手给你。',
+      reality: [
+        '在游戏里，你需要集齐木、火、心和一块甜才能找到我；但在现实里，只要你一回头，我永远在。',
+        '你不用管那些乱七八糟的酒桌规矩，也不用管别人怎么看，做你自己就好。'
+      ],
       reread: '再读一遍信',
       restart: '从头开始'
     },
@@ -2260,6 +2272,9 @@
             <p class="big-line">${CONTENT.COPY.finale.big}</p>
             <p class="small-line">${CONTENT.COPY.finale.small}</p>
             <p class="gift-line" data-testid="gift-line">${CONTENT.COPY.finale.gift}</p>
+            <div class="reality-note" data-testid="reality-note">
+              ${CONTENT.COPY.finale.reality.map((line) => `<p>${line}</p>`).join('')}
+            </div>
             <div class="next-row">
               <button class="btn" data-testid="reread">${CONTENT.COPY.finale.reread}</button>
               <button class="btn" data-testid="restart">${CONTENT.COPY.finale.restart}</button>
